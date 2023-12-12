@@ -1,0 +1,27 @@
+{
+  "spinnerStream": "stdout",
+  "progressStream": "stdout",
+  "reasonerStream": "stderr",
+  "options": [
+    {
+      "mode": "bundle",
+      "project": "tsconfig.json",
+      "exportFilename": "index.ts",
+      "useSemicolon": true,
+      "useBanner": false,
+      "useTimestamp": false,
+      "quote": "'",
+      "directive": "",
+      "fileExt": "none",
+      "overwrite": true,
+      "backup": false,
+      "generationStyle": "auto",
+      "include": ["./src/runtime/**/*.ts", "./src/generator/public/**/*.ts"],
+      "exclude": [],
+      "skipEmptyDir": true,
+      "removeBackup": false,
+      "forceYes": false,
+      "output": "./src"
+    }
+  ]
+}
