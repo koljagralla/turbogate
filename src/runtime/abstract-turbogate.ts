@@ -73,7 +73,6 @@ export abstract class AbstractTurbogate<
             : this.resources[resource.substring(0, resource.lastIndexOf('/')) as any as Resource];
         const newResource = parentResource.addResource(resource.substring(resource.lastIndexOf('/') + 1));
         this.resources[resource] = newResource;
-        console.log(resource);
       });
       slashCount++;
     }
@@ -165,7 +164,6 @@ export abstract class AbstractTurbogate<
     try {
       const permissions = require(path.join(this.params.rootDirectory, `/${directoryPath}/permissions.ts`))
         .permissions as PermissionName[];
-      console.log(permissions);
       permissions.forEach(permission => {
         this.params.permissions[permission](lambdaFn);
       });
