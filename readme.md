@@ -2,7 +2,7 @@
 
 Turbogate is a micro framework and code generator aimed at building truly serverless, well validated, well documeted REST APIs using AWS CDK Typescript in turbo speed.
 
-**V1.0.0 is completed, the only thing missing some documentation here which will follow soon.**
+**V1.0.0 is completed, the only thing missing is some documentation here which will follow soon.**
 
 <!-- # Installation
 Turbogate has three runtime dependencies which you most probably will already have installed in a Typescript CDK project[^1].
