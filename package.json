@@ -1,6 +1,6 @@
 {
   "name": "turbogate",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "Micro framework and code generator to build truly serverless well validated and well documeted REST APIs using AWS CDK Typescript in turbo speed.",
   "main": "src/index.ts",
   "bin": {
