@@ -18,7 +18,7 @@ program
   .option(
     '-r --root <root>',
     'The directory to use as root folder',
-    process.env.INIT_CWD, // Default value for root
+    process.cwd(), // Default value for root
   )
   .option(
     '-s --spec <spec>',
@@ -32,7 +32,7 @@ program
   )
   .action(async args => {
     const apiBuilderConfig: ApiBuilderConfig = {
-      rootDirectory: args.root, //path.isAbsolute(args.root) ? args.root : path.join(__dirname, args.root),
+      rootDirectory: path.isAbsolute(args.root) ? args.root : path.join(process.cwd()!, args.root),
       configFileName: args.spec,
       endpointStructure: args.endpointStructure,
     };
@@ -52,7 +52,7 @@ program
   .option(
     '-r --root <root>',
     'The directory to create the new directory with spec file in',
-    process.env.INIT_CWD, // Default value for root
+    process.cwd(), // Default value for root
   )
   .addArgument(
     new Argument(
