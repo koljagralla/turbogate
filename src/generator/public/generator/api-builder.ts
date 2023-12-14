@@ -161,7 +161,9 @@ export type AuthorizerContext = void;`;
         const authorizerLinkTemplate = `\
 ${buildGeneratedCodeDisclaimerComment(authorizerGeneratedCodeDisclaimer)}
 import { z } from 'zod';
-import { zContext } from '../../authorizer/${authorizerName}/context';
+import { zContext } from '../../${
+          this.config.endpointStructure === 'byResource' ? '../' : ''
+        }authorizer/${authorizerName}/context';
 
 export const zAuthorizerContext = zContext;
 export type AuthorizerContext = z.infer<typeof zAuthorizerContext>;`;
