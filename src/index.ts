@@ -23,6 +23,7 @@ export * from './runtime/types/configs/lambda-request-authorizer-config';
 export * from './runtime/types/definitions/authorizer-context-defintion';
 export * from './runtime/types/definitions/environment-defintion';
 export * from './runtime/types/definitions/request-definition';
+export * from './runtime/types/missing-aws-types/lambda-authorizer-context';
 export * from './runtime/types/missing-aws-types/lambda-authorizer-input-event';
 export * from './runtime/types/missing-aws-types/lambda-authorizer-response';
 export * from './runtime/types/reduced-props/reduced-node-js-function-props';
