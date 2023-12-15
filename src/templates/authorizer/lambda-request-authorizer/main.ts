@@ -5,8 +5,6 @@ import {
   RecreationBehavior,
 } from '../../../generator/private/generated-doc-data';
 import { LambdaAuthorizerInputEvent } from '../../../runtime/types/missing-aws-types/lambda-authorizer-input-event';
-import { LambdaAuthorizerResponse } from '../../../runtime/types/missing-aws-types/lambda-authorizer-response';
-import { LambdaAuthorizerUtil } from '../../../runtime/util/lambda-authorizer-util';
 import { Context } from './context';
 import { Environment } from './environment';
 
