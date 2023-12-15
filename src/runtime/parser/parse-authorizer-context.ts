@@ -11,4 +11,4 @@ function parseAuthorizerContext<C>(zContext: ZodType<C>, event: RawRequest) {
   }
 }
 
-export { parseAuthorizerContext as parseAutoSerializedAuthorizerContext };
+export { parseAuthorizerContext };

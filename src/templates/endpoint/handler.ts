@@ -5,7 +5,7 @@ import {
   GeneratedCodeDisclaimer,
   RecreationBehavior,
 } from '../../generator/private/generated-doc-data';
-import { parseAutoSerializedAuthorizerContext as parseAuthorizerContext } from '../../runtime/parser/parse-authorizer-context';
+import { parseAuthorizerContext } from '../../runtime/parser/parse-authorizer-context';
 import { parseEnvironment } from '../../runtime/parser/parse-environment';
 import { parseRequest } from '../../runtime/parser/parse-request';
 import { parseResponse } from '../../runtime/parser/parse-response';
