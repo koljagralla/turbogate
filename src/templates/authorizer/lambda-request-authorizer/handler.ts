@@ -7,13 +7,20 @@ import {
 import { parseEnvironment } from '../../../runtime/parser/parse-environment';
 import { LambdaAuthorizerInputEvent } from '../../../runtime/types/missing-aws-types/lambda-authorizer-input-event';
 import { LambdaAuthorizerResponse } from '../../../runtime/types/missing-aws-types/lambda-authorizer-response';
+import { LambdaAuthorizerUtil } from '../../../runtime/util/lambda-authorizer-util';
 import { zEnvironment } from './environment';
 import { main } from './main';
 
 export const handler = async (event: LambdaAuthorizerInputEvent): Promise<LambdaAuthorizerResponse<any, any>> => {
   const environment = parseEnvironment(zEnvironment);
 
-  return main(environment, event);
+  const result = await main(environment, event);
+  if (result[0] === 'accept') {
+    const serializedContext = JSON.stringify(result[1]);
+    return LambdaAuthorizerUtil.grantAccessResponse({ serializedContext });
+  } else {
+    return LambdaAuthorizerUtil.denyAccessResponse();
+  }
 };
 
 export const generatedCodeDisclaimer: GeneratedCodeDisclaimer = {

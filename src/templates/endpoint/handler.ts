@@ -1,20 +1,20 @@
 import { APIGatewayProxyResult } from 'aws-lambda';
-import { z } from 'zod';
-import { parseAuthorizerContext } from '../../runtime/parser/parse-authorizer-context';
-import { parseEnvironment } from '../../runtime/parser/parse-environment';
-import { parseRequest } from '../../runtime/parser/parse-request';
-import { RawRequest } from '../../runtime/types/raw-request';
-import { parseResponse } from '../../runtime/parser/parse-response';
-import { zAuthorizerContext } from './authorizer';
-import { zEnvironment } from './environment';
-import { main } from './main';
-import { Request, zRequest } from './request';
 import {
   Deletability,
   Editability,
   GeneratedCodeDisclaimer,
   RecreationBehavior,
 } from '../../generator/private/generated-doc-data';
+import { parseAutoSerializedAuthorizerContext as parseAuthorizerContext } from '../../runtime/parser/parse-authorizer-context';
+import { parseEnvironment } from '../../runtime/parser/parse-environment';
+import { parseRequest } from '../../runtime/parser/parse-request';
+import { parseResponse } from '../../runtime/parser/parse-response';
+import { RawRequest } from '../../runtime/types/raw-request';
+import { z } from 'zod';
+import { zAuthorizerContext } from './authorizer';
+import { zEnvironment } from './environment';
+import { main } from './main';
+import { Request, zRequest } from './request';
 
 export const handler = async (rawRequest: RawRequest): Promise<APIGatewayProxyResult> => {
   const environment = parseEnvironment(zEnvironment);

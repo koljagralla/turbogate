@@ -1,20 +1,22 @@
-import { ZodType, z } from 'zod';
+import { SomeZodObject, ZodObject, ZodType, z } from 'zod';
 import {
   Deletability,
   Editability,
   GeneratedCodeDisclaimer,
   RecreationBehavior,
 } from '../../../generator/private/generated-doc-data';
-import { LambdaAuthorizerContext } from '../../../runtime/types/missing-aws-types/lambda-authorizer-context';
+import { AutoSerializedAuthorizerContextZodType } from '../../../runtime/types/authorizer/auto-serialized-authorizer-context-zod-type';
 
 export const zContext = z.object({
-  // MY_CONTEXT_VALUE: z.string(),
-}) satisfies ZodType<LambdaAuthorizerContext, any, LambdaAuthorizerContext>;
+  // myContextValue: z.string(),
+  // myOtherContextValue: z.object({/**... */})
+}) satisfies AutoSerializedAuthorizerContextZodType<any>;
 
 export type Context = z.infer<typeof zContext>;
 
 export const generatedCodeDisclaimer: GeneratedCodeDisclaimer = {
-  purpose: 'Defines the data ("context") the authorizer is expected to provide upon successful authorization.',
+  purpose:
+    'Defines the data ("context") the authorizer is expected to provide upon successful authorization. This value will automatically be serialized, deserialized and validated by turbogate when it is passed between authorizer and main lambda.',
   expectedSignature: [
     'export const zContext: ZodType<LambdaAuthorizerContext, any, LambdaAuthorizerContext>',
     'export type Context = z.infer<typeof zContext>;',

@@ -13,25 +13,23 @@ import { Environment } from './environment';
 export async function main(
   environment: Environment,
   event: LambdaAuthorizerInputEvent,
-): Promise<LambdaAuthorizerResponse<Context, any>> {
-  /*
-  // Example minimal implementation:
+): Promise<['accept', Context] | ['deny']> {
+  // // Example minimal implementation:
 
-  // Extract relevant information from the event
-  const authHeaderValue = event.headers['my-custom-auth-header'];
+  // // Extract relevant information from the event
+  // const authHeaderValue = event.headers['my-custom-auth-header'];
 
-  // Check if the auth header is what we expect
-  if (authHeaderValue === 'my-expected-auth-value') {
+  // // Check if the auth header is what we expect
+  // if (authHeaderValue === 'my-expected-auth-value') {
+  //   // Grant access to the endpoint, include the required context
+  //   const context = {
+  //     myContextValue: 'my-context-value',
+  //   };
+  //   return ['accept', context];
+  // }
 
-    // Grant access to the endpoint, include the required context
-    return LambdaAuthorizerUtil.grantAccess(event.methodArn, {
-      MY_CONTEXT_VALUE: 'my-context-value',
-    });
-  }
-
-  // Deny access to the endpoint
-  return LambdaAuthorizerUtil.denyAccess(event.methodArn);
-  */
+  // // Deny access to the endpoint
+  // return ['deny'];
 
   throw new Error('Not implemented');
 }

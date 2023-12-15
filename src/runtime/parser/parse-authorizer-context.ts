@@ -1,18 +1,14 @@
-import { AuthorizerContextDefintion } from '../types/definitions/authorizer-context-defintion';
+import { ZodType } from 'zod';
 import { RawRequest } from '../types/raw-request';
-import { LinearZodType } from '../types/linear-zod-type';
 
-function parseAuthorizerContext<AC extends AuthorizerContextDefintion>(
-  zAuthorizerContext: LinearZodType<AC>,
-  event: RawRequest,
-) {
+function parseAuthorizerContext<C>(zContext: ZodType<C>, event: RawRequest) {
   try {
     // @ts-ignore
-    const authorizerContext = event.requestContext.authorizer;
-    return zAuthorizerContext.parse(authorizerContext);
+    const serializedContext = event.requestContext?.authorizer?.serializedContext;
+    return zContext.parse(serializedContext);
   } catch (error: any) {
     throw new Error(`Failed to parse authorizer context: ${error.message}`);
   }
 }
 
-export { parseAuthorizerContext };
+export { parseAuthorizerContext as parseAutoSerializedAuthorizerContext };
