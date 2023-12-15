@@ -25,6 +25,7 @@ program
     'The filename of the turbogate spec file in the root folder',
     'turbospec.ts', // Default value for spec
   )
+  // TODO limit to byResource and byPath
   .option(
     '-e --endpointStructure <endpointStructure>',
     'Whether to put all endpoint folders directly in the endpoints folder (e.g. endpoints/my-operation, recommend for small APIs) or to infer the resource from the path and create an organizational hierarchy level between endpoints and operation folder (e.g. endpoints/my-resource/my-operation, recommend for larger APIs). Migrating generated code between this options is tedious work so choose wisely.',

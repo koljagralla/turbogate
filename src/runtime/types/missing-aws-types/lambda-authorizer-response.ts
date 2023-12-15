@@ -1,8 +1,11 @@
+import { LambdaAuthorizerContext } from './lambda-authorizer-context';
+
 /**
- * Lambda Authorizer Response (not provided by CDK/AWS SDK) as defined {@link https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-lambda-authorizer-output.html here by AWS}.
+ * Lambda Authorizer Response (not provided by CDK/AWS SDK) as defined
+ * {@link https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-lambda-authorizer-output.html here by AWS}.
  */
 export type LambdaAuthorizerResponse<
-  ProvidedContext extends object,
+  ProvidedContext extends LambdaAuthorizerContext,
   Effect extends 'Allow' | 'Deny',
 > = Effect extends 'Allow'
   ? {
