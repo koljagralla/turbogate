@@ -18,6 +18,7 @@ export * from './generator/public/config/zPath';
 export * from './generator/public/config/zTurbogateSpec';
 export * from './generator/public/generator/api-builder';
 export * from './generator/public/generator/spec-builder';
+export * from './runtime/types/authorizer/auto-serialized-authorizer-context-zod-type';
 export * from './runtime/types/configs/endpoint-config';
 export * from './runtime/types/configs/lambda-request-authorizer-config';
 export * from './runtime/types/definitions/authorizer-context-defintion';
