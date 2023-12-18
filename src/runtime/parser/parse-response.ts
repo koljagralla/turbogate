@@ -1,8 +1,8 @@
-export function parseResponse<T extends { body: any } | {}>(response: T): T & { body: string | void } {
+export function parseResponse<T extends { body: any } | {}>(response: T): T & { body: string | never } {
   if ('body' in response) {
     return {
       ...response,
-      body: response.body !== undefined ? JSON.stringify(response.body) : undefined,
+      body: JSON.stringify(response.body),
     };
   }
   return response as T & { body: never };
