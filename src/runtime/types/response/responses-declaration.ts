@@ -10,7 +10,7 @@ export type ResponsesDeclaration = {
 // Splitting into multiple types is necessary for TS to infer correctly.
 type ResponseDeclaration = ResponseDeclarationWithBody | ResponseDeclarationWithoutBody;
 type ResponseDeclarationWithBody = {
-  description: string;
+  description?: string;
   schema: ZodTypeAny;
 };
-type ResponseDeclarationWithoutBody = { description: string };
+type ResponseDeclarationWithoutBody = { description?: string };
