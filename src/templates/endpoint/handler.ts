@@ -1,4 +1,4 @@
-import { APIGatewayProxyResult } from 'aws-lambda';
+import { APIGatewayProxyResult, Context } from 'aws-lambda';
 import {
   Deletability,
   Editability,
@@ -16,7 +16,7 @@ import { zEnvironment } from './environment';
 import { main } from './main';
 import { Request, zRequest } from './request';
 
-export const handler = async (rawRequest: RawRequest): Promise<APIGatewayProxyResult> => {
+export const handler = async (rawRequest: RawRequest, context: Context): Promise<APIGatewayProxyResult> => {
   const environment = parseEnvironment(zEnvironment);
   const authorizerContext = parseAuthorizerContext(zAuthorizerContext, rawRequest);
 
@@ -33,7 +33,7 @@ export const handler = async (rawRequest: RawRequest): Promise<APIGatewayProxyRe
     throw e;
   }
 
-  return main(environment, request, authorizerContext).then(parseResponse);
+  return main(environment, request, authorizerContext, context).then(parseResponse);
 };
 
 export const generatedCodeDisclaimer: GeneratedCodeDisclaimer = {

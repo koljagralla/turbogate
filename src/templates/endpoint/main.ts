@@ -3,6 +3,7 @@ import { AuthorizerContext } from './authorizer';
 import { Environment } from './environment';
 import { Request } from './request';
 import { Response } from './responses';
+import { Context } from 'aws-lambda';
 import {
   Deletability,
   Editability,
@@ -14,6 +15,7 @@ export async function main(
   environment: Environment,
   request: Request,
   authorizerContext: AuthorizerContext,
+  lambdaContext: Context,
 ): Promise<Response> {
   // Replace this with your business logic.
   return {
