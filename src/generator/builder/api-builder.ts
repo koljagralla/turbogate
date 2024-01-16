@@ -1,9 +1,9 @@
 import { copyTemplate } from '../util/copy-template-directory';
-import { TurbogateSpec, zTurbogateSpec } from '../zod/zTurbogateSpec';
+import { TurbogateSpec, zTurbogateSpec } from '../spec/zTurbogateSpec';
 import * as fs from 'fs';
 import path from 'path';
-import { Authorizer } from '../zod/zAuthorizer';
-import { HttpMethod } from '../zod/zHttpMethod';
+import { Authorizer } from '../spec/zAuthorizer';
+import { HttpMethod } from '../spec/zHttpMethod';
 import { Deletability, Editability, GeneratedCodeDisclaimer, RecreationBehavior } from '../util/generated-doc-data';
 import { buildGeneratedCodeDisclaimerComment } from '../util/build-generated-doc-disclaimer-comment';
 
