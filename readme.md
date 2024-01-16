@@ -29,7 +29,7 @@ You can define lambda authorizers with the contexts they provide and assign them
 ### Automatic creation of boilerplate
 Once you have defined the structure of your API in your `turbospec.ts` turbogate will generate boileplate for all endpoints and authorizers. You only have to fill in the gaps (lambda business code and data structures).
 
-### Automatic creation of all required AWS constructs
+### Automatic creation and wiring of all required AWS constructs
 Once you filled the gaps in the boilerplate you are done. Everything else is automatically generated and wired up during cdk synth. Of cause you can pass in custom configurations for lambdas, lambda integrations, api gateway etc.
 
 
@@ -37,7 +37,7 @@ Once you filled the gaps in the boilerplate you are done. Everything else is aut
 You can define the required environment data and permissions for each lambda (endpoint and authorizer). The defined values will be dynamically picked up by TypeScript and you can pass in those values in your stack definition utilizing previously created constructs. Need one value or permission more than once? Simply name them the same. Turbogate will consolidate the initialization of those values automatically.
 
 ### Maximum adaptability
-Turbogate was developed with the modern TypeScript developer in mind. It (mostly) follows a functional approach instead of using classes. The code that defines and endpoint or authorizer is generated as fully adapatable boilerplate for you along with some recommdendations on what to look out for if you want to change it. This means while you of cause can use turbogate in full auto pilot to power code a 30+ endpoint API in a day you also could dive down deep into its mode of operation and precisely adjust most of it to your needs without having to change anything about the framework itself.
+Turbogate was developed with the modern TypeScript developer in mind. It (mostly) follows a functional approach instead of using classes. The code that defines an endpoint or authorizer is generated as fully adapatable boilerplate for you along with some recommdendations on what to look out for if you want to change it. This means while you of cause can use turbogate in full auto pilot to power code a 30+ endpoint API in a day you also could dive down deep into its mode of operation and precisely adjust most of it to your needs without having to change anything about the framework itself.
 
 # Getting started
 Assuming you use yarn. Adapt to your package manager if needed.
@@ -46,17 +46,26 @@ Assuming you use yarn. Adapt to your package manager if needed.
 Turbogate heavily utizilizes [Zod](https://github.com/colinhacks/zod) to define and validate inbound, outbound and config data structures. You should at least have a basic understanding on how to use Zod.
 
 ### 1. Installation
-Turbogate has three runtime dependencies which you most probably will already have installed in a Typescript CDK project[^1].
+Turbogate two dev peer dependencies which you most probably will already have installed in a Typescript CDK project.
 
 ```bash
-yarn add aws-cdk-lib ts-node zod
+yarn add aws-cdk-lib ts-node -D
 ```
 
-Then install the main package:
+Next, install the one runtime peer dependency Zod.
+
+```bash
+yarn add zod
+```
+
+Finally install the main package:
 
 ```bash
 yarn add koljagralla/turbogate
 ```
+
+> [!NOTE]
+> In case the peer dependencies do not work properly, ensure that your installed versions have no breaking changes with the versions specified in turbogate's package.json.
 
 ### 2. Initialization
 Navigate to the directory you want the newly created API to reside in. Then run `yarn turbogate init my-api`. Of cause, replace the `my-api` with your API name.
@@ -101,7 +110,6 @@ To <ins>remove an endpoint</ins> remove it in your `turbospec.ts` and rerun the 
 
 To <ins>remove an authorizer</ins> remove it in your `turbospec.ts` (delcaration of the authorizer itself and all references by endpoints), delete all `authorizer.ts` files of endpoints that used that authorizer and rerun the `turbogate build` command (see step 4). Additionally, delete its respective folder. If your authorizer declared unique environment values or permissions that are orphaned now you might also need to remove those values from the constructor arguments of your turbogate. Also, since you authorizer context probably changed you might need to tidy up the the business code in the `main.ts` files of the formerly protected endpoints.
 
-[^1]: In case something does not work properly, ensure that your installed versions have no breaking changes with the versions specified in the package.json.
 
 # Patterns and recommended conventions
 ### Working with constructs created by turbogate
