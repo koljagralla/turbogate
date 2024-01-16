@@ -16,7 +16,10 @@
       "overwrite": true,
       "backup": false,
       "generationStyle": "auto",
-      "include": ["./src/runtime/**/*.ts", "./src/generator/public/**/*.ts"],
+      "include": [
+        "./src/runtime/**/*.ts",
+        "./src/generator/spec/**/*.ts"
+      ],
       "exclude": [],
       "skipEmptyDir": true,
       "removeBackup": false,
