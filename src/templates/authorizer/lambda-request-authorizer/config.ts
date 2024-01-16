@@ -3,7 +3,7 @@ import {
   Editability,
   GeneratedCodeDisclaimer,
   RecreationBehavior,
-} from '../../../generator/private/generated-doc-data';
+} from '../../../generator/util/generated-doc-data';
 import { LambdaRequestAuthorizerConfig } from '../../../runtime/types/configs/lambda-request-authorizer-config';
 import { defaultConfig } from '../../_root/config/default-config';
 

@@ -1,6 +1,6 @@
-import { Deletability, Editability, GeneratedCodeDisclaimer } from '../private/generated-doc-data';
+import { Deletability, Editability, GeneratedCodeDisclaimer } from '../util/generated-doc-data';
 import { buildGeneratedCodeDisclaimerComment } from '../util/build-generated-doc-disclaimer-comment';
-import { zName } from '../public/config/zName';
+import { zName } from '../zod/zName';
 
 export function buildSpec(name: string) {
   try {

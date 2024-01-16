@@ -6,7 +6,7 @@ import {
   Editability,
   GeneratedCodeDisclaimer,
   RecreationBehavior,
-} from '../../../generator/private/generated-doc-data';
+} from '../../../generator/util/generated-doc-data';
 
 export const zEnvironment = z.object({
   // MY_ENV_VAR: Env.string,
