@@ -12,27 +12,10 @@ Simply <ins>no more spending and hour for an endpoint</ins> that would take minu
 
 
 - [Features](#features)
-    - [Automatic prevalidation](#automatic-prevalidation)
-    - [Lambda authorizers](#lambda-authorizers)
-    - [Automatic creation of boilerplate](#automatic-creation-of-boilerplate)
-    - [Automatic creation of all required AWS constructs](#automatic-creation-of-all-required-aws-constructs)
-    - [DRY declaration and defintion of environment data and permissions](#dry-declaration-and-defintion-of-environment-data-and-permissions)
-    - [Maximum adaptability](#maximum-adaptability)
 - [Getting started](#getting-started)
-    - [Prerequisites](#prerequisites)
-    - [1. Installation](#1-installation)
-    - [2. Initialization](#2-initialization)
-    - [3. Declare endpoints and authorizers](#3-declare-endpoints-and-authorizers)
-    - [4. Generate boilerplate and entrypoint](#4-generate-boilerplate-and-entrypoint)
-    - [5. Fill the gaps on endpoints and authorizers](#5-fill-the-gaps-on-endpoints-and-authorizers)
-    - [6. Add the turbogate to your IaC](#6-add-the-turbogate-to-your-iac)
-    - [7. Addind and removing endpoints and authorizers](#7-addind-and-removing-endpoints-and-authorizers)
 - [Patterns and recommended conventions](#patterns-and-recommended-conventions)
-    - [Working with constructs created by turbogate](#working-with-constructs-created-by-turbogate)
-    - [No more `cd`](#no-more-cd)
-    - [Code formatting](#code-formatting)
-    - [Naming convention recommendation](#naming-convention-recommendation)
 - [Roadmap](#roadmap)
+
 
 
 # Features
