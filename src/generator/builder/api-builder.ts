@@ -1,28 +1,24 @@
-import { copyTemplate } from '../../util/copy-template-directory';
-import { TurbogateSpec, zTurbogateSpec } from '../config/zTurbogateSpec';
+import { copyTemplate } from '../util/copy-template-directory';
+import { TurbogateSpec, zTurbogateSpec } from '../public/config/zTurbogateSpec';
 import * as fs from 'fs';
 import path from 'path';
-import { Authorizer } from '../config/zAuthorizer';
-import { HttpMethod } from '../config/zHttpMethod';
-import {
-  Deletability,
-  Editability,
-  GeneratedCodeDisclaimer,
-  RecreationBehavior,
-} from '../../private/generated-doc-data';
-import { buildGeneratedCodeDisclaimerComment } from '../../util/build-generated-doc-disclaimer-comment';
+import { Authorizer } from '../public/config/zAuthorizer';
+import { HttpMethod } from '../public/config/zHttpMethod';
+import { Deletability, Editability, GeneratedCodeDisclaimer, RecreationBehavior } from '../private/generated-doc-data';
+import { buildGeneratedCodeDisclaimerComment } from '../util/build-generated-doc-disclaimer-comment';
 
 export type ApiBuilderConfig = {
   rootDirectory: string;
   configFileName: string;
   endpointStructure: 'byResource' | 'allTogether';
 };
-
 export class ApiBuilder {
   constructor(private readonly config: ApiBuilderConfig) {}
 
   private apiConfig: TurbogateSpec;
   private createdLambdaRequestAuthorizers: Set<string> = new Set();
+
+  private readonly templateFolderPath = path.join(__dirname, '../../templates');
 
   private readonly usedResources: Set<string> = new Set();
   private readonly allResources: Set<string> = new Set();
@@ -47,7 +43,7 @@ export class ApiBuilder {
   public async build(): Promise<void> {
     const apiConfig = await this.loadApiConfig();
     this.apiConfig = apiConfig;
-    const endpointTemplateFolderPath = path.join(__dirname, '../../../templates/endpoint');
+    const endpointTemplateFolderPath = path.join(this.templateFolderPath, 'endpoint');
 
     this.copyConfigTemplates();
     this.copyShared();
@@ -105,12 +101,12 @@ export class ApiBuilder {
   }
 
   private copyConfigTemplates(): void {
-    const rootTemplateFolderPath = path.join(__dirname, '../../../templates/_root/config');
+    const rootTemplateFolderPath = path.join(this.templateFolderPath, '_root/config');
     copyTemplate(`${rootTemplateFolderPath}`, `${this.config.rootDirectory}/config`);
   }
 
   private copyShared(): void {
-    const sharedFolderPath = path.join(__dirname, '../../../templates/_root/shared');
+    const sharedFolderPath = path.join(this.templateFolderPath, '_root/shared');
     copyTemplate(`${sharedFolderPath}`, `${this.config.rootDirectory}/shared`);
   }
 
@@ -145,8 +141,8 @@ export type AuthorizerContext = void;`;
           // Copy the authorizer template to the authorizers folder
           const thisAuthorizerDirectoryPathFull = this.getAuthorizerPath(authorizerName, 'full');
           const authorizerTemplateFolderPath = path.join(
-            __dirname,
-            '../../../templates/authorizer/lambda-request-authorizer',
+            this.templateFolderPath,
+            'authorizer/lambda-request-authorizer',
           );
           copyTemplate(authorizerTemplateFolderPath, thisAuthorizerDirectoryPathFull, 2);
 
