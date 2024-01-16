@@ -1,9 +1,11 @@
+import { z } from 'zod';
 import {
   Deletability,
   Editability,
   GeneratedCodeDisclaimer,
   RecreationBehavior,
 } from '../../../generator/util/generated-doc-data';
+import { fauxExtendZodWithOpenApi } from '../../../runtime/openapi/faux-extend-zod-with-open-api';
 import { parseEnvironment } from '../../../runtime/parser/parse-environment';
 import { LambdaAuthorizerInputEvent } from '../../../runtime/types/missing-aws-types/lambda-authorizer-input-event';
 import { LambdaAuthorizerResponse } from '../../../runtime/types/missing-aws-types/lambda-authorizer-response';
@@ -12,6 +14,8 @@ import { zEnvironment } from './environment';
 import { main } from './main';
 
 export const handler = async (event: LambdaAuthorizerInputEvent): Promise<LambdaAuthorizerResponse<any, any>> => {
+  fauxExtendZodWithOpenApi(z);
+
   const environment = parseEnvironment(zEnvironment);
 
   const result = await main(environment, event);

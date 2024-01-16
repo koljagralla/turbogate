@@ -2,13 +2,14 @@ import * as apigateway from 'aws-cdk-lib/aws-apigateway';
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { Construct } from 'constructs';
 import * as path from 'path';
-import { ZodObject } from 'zod';
+import { ZodObject, z } from 'zod';
 import { Authorizer } from '../generator/zod/zAuthorizer';
 import { HttpMethod } from '../generator/zod/zHttpMethod';
 import { EndpointConfig } from './types/configs/endpoint-config';
 import { EnvironmentDefinition } from './types/definitions/environment-defintion';
 import { LambdaRequestAuthorizerConfig } from './types/configs/lambda-request-authorizer-config';
 import { ReducedNodejsFunctionProps } from './types/reduced-props/reduced-node-js-function-props';
+import { extendZodWithOpenApi } from '@asteasolutions/zod-to-openapi';
 
 export abstract class AbstractTurbogate<
   Resource extends string,
@@ -49,6 +50,9 @@ export abstract class AbstractTurbogate<
       apiGatewayProps?: apigateway.RestApiProps;
     },
   ) {
+    // Ensure zod is extended with openapi
+    extendZodWithOpenApi(z);
+
     // Setup the API Gateway
     this.apiGw = new apigateway.RestApi(scope, this.id('api-gw'), this.params.apiGatewayProps);
 
