@@ -1,10 +1,10 @@
 import { copyTemplate } from '../util/copy-template-directory';
-import { TurbogateSpec, zTurbogateSpec } from '../public/config/zTurbogateSpec';
+import { TurbogateSpec, zTurbogateSpec } from '../zod/zTurbogateSpec';
 import * as fs from 'fs';
 import path from 'path';
-import { Authorizer } from '../public/config/zAuthorizer';
-import { HttpMethod } from '../public/config/zHttpMethod';
-import { Deletability, Editability, GeneratedCodeDisclaimer, RecreationBehavior } from '../private/generated-doc-data';
+import { Authorizer } from '../zod/zAuthorizer';
+import { HttpMethod } from '../zod/zHttpMethod';
+import { Deletability, Editability, GeneratedCodeDisclaimer, RecreationBehavior } from '../util/generated-doc-data';
 import { buildGeneratedCodeDisclaimerComment } from '../util/build-generated-doc-disclaimer-comment';
 
 export type ApiBuilderConfig = {

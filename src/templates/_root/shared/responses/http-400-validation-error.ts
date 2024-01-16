@@ -4,7 +4,7 @@ import {
   Editability,
   GeneratedCodeDisclaimer,
   RecreationBehavior,
-} from '../../../../generator/private/generated-doc-data';
+} from '../../../../generator/util/generated-doc-data';
 import { ResponsesDeclaration } from '../../../../runtime/types/response/responses-declaration';
 
 export const http400ValidationError = {

@@ -5,7 +5,7 @@ import {
   Editability,
   GeneratedCodeDisclaimer,
   RecreationBehavior,
-} from '../../generator/private/generated-doc-data';
+} from '../../generator/util/generated-doc-data';
 
 /**
  * Use this to define the request schema for your endpoint.

@@ -4,7 +4,7 @@ import {
   Editability,
   GeneratedCodeDisclaimer,
   RecreationBehavior,
-} from '../../generator/private/generated-doc-data';
+} from '../../generator/util/generated-doc-data';
 import { parseAuthorizerContext } from '../../runtime/parser/parse-authorizer-context';
 import { parseEnvironment } from '../../runtime/parser/parse-environment';
 import { parseRequest } from '../../runtime/parser/parse-request';

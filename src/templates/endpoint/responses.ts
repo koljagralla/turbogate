@@ -8,7 +8,7 @@ import {
   Editability,
   GeneratedCodeDisclaimer,
   RecreationBehavior,
-} from '../../generator/private/generated-doc-data';
+} from '../../generator/util/generated-doc-data';
 import { z } from 'zod';
 
 export const responses = {

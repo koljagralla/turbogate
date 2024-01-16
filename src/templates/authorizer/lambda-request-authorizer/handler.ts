@@ -3,7 +3,7 @@ import {
   Editability,
   GeneratedCodeDisclaimer,
   RecreationBehavior,
-} from '../../../generator/private/generated-doc-data';
+} from '../../../generator/util/generated-doc-data';
 import { parseEnvironment } from '../../../runtime/parser/parse-environment';
 import { LambdaAuthorizerInputEvent } from '../../../runtime/types/missing-aws-types/lambda-authorizer-input-event';
 import { LambdaAuthorizerResponse } from '../../../runtime/types/missing-aws-types/lambda-authorizer-response';

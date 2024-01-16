@@ -9,7 +9,7 @@ import {
   Editability,
   GeneratedCodeDisclaimer,
   RecreationBehavior,
-} from '../../generator/private/generated-doc-data';
+} from '../../generator/util/generated-doc-data';
 
 export async function main(
   environment: Environment,
