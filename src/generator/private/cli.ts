@@ -60,7 +60,7 @@ program
   .option(
     '-r --root <root>',
     'The directory to create the new directory with spec file in',
-    process.cwd(), // Default value for root
+    process.env.INIT_CWD || process.cwd(), // Default value for root
   )
   .addArgument(
     new Argument(
