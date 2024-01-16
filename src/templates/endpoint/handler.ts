@@ -15,8 +15,11 @@ import { zAuthorizerContext } from './authorizer';
 import { zEnvironment } from './environment';
 import { main } from './main';
 import { Request, zRequest } from './request';
+import { fauxExtendZodWithOpenApi } from '../../runtime/openapi/faux-extend-zod-with-open-api';
 
 export const handler = async (rawRequest: RawRequest, context: Context): Promise<APIGatewayProxyResult> => {
+  fauxExtendZodWithOpenApi(z);
+
   const environment = parseEnvironment(zEnvironment);
   const authorizerContext = parseAuthorizerContext(zAuthorizerContext, rawRequest);
 
