@@ -90,7 +90,7 @@ yarn turbogate build
 ```
 This will create the boilerplate files for your defined authorizers and endpoints as well as the entrypoint (`my-api-turbogate.ts`) alongside some boilerplate config and response fragments.
 
-Now, don't be scared. There are six files per endpoint. This looks like a lot on first sight but the files are quite small and you will soon find that this allows for great overview when working on an endpoint after you spent some with turbogate.
+Now, don't be scared. There are nine files per endpoint. This looks like a lot on first sight but the files are quite small and you will soon find that this allows for great overview when working on an endpoint after you spent some with turbogate.
 
 Each generated file contains a header comment explaining its purpose, editability and regenrating behavior. You should take a few minutes to get familiar with those files.
 

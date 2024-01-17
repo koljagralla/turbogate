@@ -9,7 +9,7 @@ import { ResponsesDeclaration } from '../../../../runtime/types/response/respons
 
 export const http500InternalServerError = {
   500: {
-    description: 'Internal server error',
+    description: 'Internal server error.',
     schema: z.any(),
   },
 } as const satisfies ResponsesDeclaration;
