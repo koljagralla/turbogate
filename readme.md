@@ -20,24 +20,31 @@ Simply <ins>no more spending and hour for an endpoint</ins> that would take minu
 
 # Features
 
-### Automatic prevalidation
-Requests, environment data and authorizer context are automatically parsed and prevalidated using [Zod](https://github.com/colinhacks/zod). You define the expected data structure for the request (headers, body, path, query), the authorizer payload (the data a lambda authorizer can pass to the endpoints lambda it protects) and the environment data (e.g. for passing in resource names). At runtime those zod types are used to parse the defined data and make it available strongly typed in your business code.
 
-### Lambda authorizers
-You can define lambda authorizers with the contexts they provide and assign them to endpoints in your `turbospec.ts`. The implementation of the business code for the defined authorizers is as easy and aided as that of the endpoint lambdas.
+
+<!-- ### Lambda authorizers
+You can define lambda authorizers with the contexts they provide and assign them to endpoints in your `turbospec.ts`. The implementation of the business code for the defined authorizers is as easy and aided as that of the endpoint lambdas. -->
 
 ### Automatic creation of boilerplate
-Once you have defined the structure of your API in your `turbospec.ts` turbogate will generate boileplate for all endpoints and authorizers. You only have to fill in the gaps (lambda business code and data structures).
+Simply define the fundamental structure of your API and turbogate will generate boileplate for all endpoints and authorizers. You only have to fill in the gaps (lambda business code and data structures).
 
 ### Automatic creation and wiring of all required AWS constructs
 Once you filled the gaps in the boilerplate you are done. Everything else is automatically generated and wired up during cdk synth. Of cause you can pass in custom configurations for lambdas, lambda integrations, api gateway etc.
 
+### Automatic prevalidation
+All contextual data your business code needs (request, environment data, authorizer context) is automatically parsed and prevalidated at runtime using [Zod](https://github.com/colinhacks/zod). This way you can use it strongly typed in your business code without writing validation logic over and over again.
+
+### Automatic OpenAPI 3.1 spec generation
+Generate complete OpenAPI 3.1 spec from your API. Turbogate uses [zod-to-open-api](https://github.com/asteasolutions/zod-to-openapi) under the hood to gather information regarding request and response data and automatically combines those with all information regarding paths, authorizers and some additional metadata. The result is a concise OpenAPI spec that is suitable to generate developer documentation pages or SDKs/clients.
+
 
 ### DRY declaration and defintion of environment data and permissions
-You can define the required environment data and permissions for each lambda (endpoint and authorizer). The defined values will be dynamically picked up by TypeScript and you can pass in those values in your stack definition utilizing previously created constructs. Need one value or permission more than once? Simply name them the same. Turbogate will consolidate the initialization of those values automatically.
+Define all needed lambda environment variables and permissions once and attach them to lambdas IoC style. No more `myDynamoTable.grantRead(...)` a dozen times in your IaC code.
 
 ### Maximum adaptability
 Turbogate was developed with the modern TypeScript developer in mind. It (mostly) follows a functional approach instead of using classes. The code that defines an endpoint or authorizer is generated as fully adapatable boilerplate for you along with some recommdendations on what to look out for if you want to change it. This means while you of cause can use turbogate in full auto pilot to power code a 30+ endpoint API in a day you also could dive down deep into its mode of operation and precisely adjust most of it to your needs without having to change anything about the framework itself.
+
+
 
 # Getting started
 Assuming you use yarn. Adapt to your package manager if needed.
@@ -45,11 +52,13 @@ Assuming you use yarn. Adapt to your package manager if needed.
 ### Prerequisites
 Turbogate heavily utizilizes [Zod](https://github.com/colinhacks/zod) to define and validate inbound, outbound and config data structures. You should at least have a basic understanding on how to use Zod.
 
+It is also a good idea to have a look at [zod-to-openapi](https://github.com/asteasolutions/zod-to-openapi) in case you want to make use of the OpenAPI spec generation feature. You do not need to set anything up, everything is wired up for you. But you should know the [`.openapi(...)`-method](https://github.com/asteasolutions/zod-to-openapi?tab=readme-ov-file#the-openapi-method)
+
 ### 1. Installation
-Turbogate two dev peer dependencies which you most probably will already have installed in a Typescript CDK project.
+Turbogate three dev peer dependencies. You most probably will already have some of them installed in a Typescript CDK project.
 
 ```bash
-yarn add aws-cdk-lib ts-node -D
+yarn add aws-cdk-lib ts-node @asteasolutions/zod-to-openapi -D
 ```
 
 Next, install the one runtime peer dependency Zod.
@@ -147,7 +156,7 @@ Do whatever you like but these naming convetions for environment variable and pe
 
 
 # Roadmap
-* Adding the possibility to generate complete and verbosely documented OpenAPI spec files from the turbogate defintion.
+* ~~Adding the possibility to generate complete and verbosely documented OpenAPI spec files from the turbogate defintion.~~ ✅
 * Automate removal of endpoints and authorizers (treeshaking).
 * Rename permissions to hooks. Sometimes you need to interact with a lambda after its constructs creation in a way that is not adding any permissions. Therefore the name hooks seems better suited.
 
