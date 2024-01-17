@@ -1,27 +1,22 @@
+import { OpenAPIRegistry, OpenApiGeneratorV31, RouteConfig } from '@asteasolutions/zod-to-openapi';
 import * as apigateway from 'aws-cdk-lib/aws-apigateway';
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { Construct } from 'constructs';
+import * as fs from 'fs';
+import * as yaml from 'js-yaml';
 import * as path from 'path';
-import { AnyZodObject, ZodObject, ZodType, z } from 'zod';
+import { AnyZodObject, ZodObject } from 'zod';
 import { Authorizer } from '../generator/spec/zAuthorizer';
 import { HttpMethod } from '../generator/spec/zHttpMethod';
 import { EndpointConfig } from './types/configs/endpoint-config';
-import { EnvironmentDefinition } from './types/definitions/environment-defintion';
 import { LambdaRequestAuthorizerConfig } from './types/configs/lambda-request-authorizer-config';
-import { ReducedNodejsFunctionProps } from './types/reduced-props/reduced-node-js-function-props';
-import {
-  OpenAPIRegistry,
-  OpenApiGeneratorV31,
-  RouteConfig,
-  extendZodWithOpenApi,
-} from '@asteasolutions/zod-to-openapi';
-import * as yaml from 'js-yaml';
-import * as fs from 'fs';
-import { RequestDefinition } from './types/definitions/request-definition';
-import { ResponsesDeclaration } from './types/response/responses-declaration';
+import { EnvironmentDefinition } from './types/definitions/environment-defintion';
+import { ApiDocs } from './types/docs/api-docs';
+import { AuthorizerDocs } from './types/docs/authorizer-docs';
 import { EndpointDocs } from './types/docs/endpoint-docs';
 import { OpenAPIProps } from './types/docs/openapi-props';
-import { ApiDocs } from './types/docs/api-docs';
+import { ReducedNodejsFunctionProps } from './types/reduced-props/reduced-node-js-function-props';
+import { ResponsesDeclaration } from './types/response/responses-declaration';
 
 export abstract class AbstractTurbogate<
   Resource extends string,
@@ -130,6 +125,9 @@ export abstract class AbstractTurbogate<
           lambdaFn: lambdaFn,
           apigatewayRequestAuthorizer: authorizer,
         };
+
+        const docs = this.loadTS<AuthorizerDocs>('docs', lambdaRequestAuthorizer.lambdaDirectoryPath, 'docs.ts');
+        this.openapiRegistry.registerComponent('securitySchemes', lambdaRequestAuthorizer.name, docs);
       } catch (e: any) {
         console.log(`Failed to create lambda request authorizer ${lambdaRequestAuthorizer.name}: ${e.message}`);
         process.exit(1);
@@ -168,11 +166,12 @@ export abstract class AbstractTurbogate<
       }
 
       try {
+        // Create the lambda and add it to the operations registry
         const lambdaFn = this.createLambda(operation.name, operation.lambdaDirectoryPath, config.lambda);
         this.operations[operation.name] = { lambdaFn };
 
+        // Add the authorizer to the operation if it exists
         let methodOptions: apigateway.MethodOptions = {};
-
         if (operation.authorizer) {
           if (operation.authorizer.authorizerType === 'lambdaRequestAuthorizer') {
             methodOptions = {
@@ -186,15 +185,19 @@ export abstract class AbstractTurbogate<
           }
         }
 
+        // Link the lambda to the resource
         this.resources[operation.path].addMethod(
           operation.method,
           new apigateway.LambdaIntegration(lambdaFn, config.integration),
           methodOptions,
         );
 
+        // Add the endpoint to the OpenAPI registry
         const request = this.loadTS<AnyZodObject>('zRequest', operation.lambdaDirectoryPath, 'request.ts');
         const responses = this.loadTS<ResponsesDeclaration>('responses', operation.lambdaDirectoryPath, 'responses.ts');
         const docs = this.loadTS<EndpointDocs>('docs', operation.lambdaDirectoryPath, 'docs.ts');
+        const { authorizationScopes } = docs;
+        delete docs.authorizationScopes;
         const parsedResponses: RouteConfig['responses'] = {};
         Object.entries(responses).forEach(([statusCode, response]) => {
           parsedResponses[statusCode] =
@@ -211,7 +214,6 @@ export abstract class AbstractTurbogate<
                   description: response.description!,
                 };
         });
-
         this.openapiRegistry.registerPath({
           ...docs,
           method: operation.method.toLowerCase() as any,
@@ -229,6 +231,9 @@ export abstract class AbstractTurbogate<
             params: request.shape.pathParameters,
           },
           responses: parsedResponses,
+          security: operation.authorizer
+            ? [{ [operation.authorizer.authorizerName]: authorizationScopes || [] }]
+            : undefined,
         });
       } catch (e: any) {
         console.log(`Failed to setup endpoint lambda ${operation.name}: ${e.message}`);
@@ -243,7 +248,7 @@ export abstract class AbstractTurbogate<
       return;
     }
 
-    const docs = this.loadTS<ApiDocs>('docs', this.params.rootDirectory, 'docs.ts');
+    const docs = this.loadTS<ApiDocs>('docs', '', 'docs.ts');
     const generator = new OpenApiGeneratorV31(this.openapiRegistry.definitions);
     const document = generator.generateDocument({
       ...docs,
