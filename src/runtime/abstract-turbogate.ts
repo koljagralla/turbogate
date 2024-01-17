@@ -21,6 +21,7 @@ import { RequestDefinition } from './types/definitions/request-definition';
 import { ResponsesDeclaration } from './types/response/responses-declaration';
 import { EndpointDocs } from './types/docs/endpoint-docs';
 import { OpenAPIProps } from './types/docs/openapi-props';
+import { ApiDocs } from './types/docs/api-docs';
 
 export abstract class AbstractTurbogate<
   Resource extends string,
@@ -238,18 +239,15 @@ export abstract class AbstractTurbogate<
 
   private generateOpenApiSpec() {
     const config = this.params.openapi;
-
     if (!config) {
       return;
     }
 
+    const docs = this.loadTS<ApiDocs>('docs', this.params.rootDirectory, 'docs.ts');
     const generator = new OpenApiGeneratorV31(this.openapiRegistry.definitions);
     const document = generator.generateDocument({
+      ...docs,
       openapi: '3.1.0',
-      info: {
-        title: 'Hello World Title',
-        version: '0.0.X',
-      },
     });
     const documentYaml = yaml.dump(document);
     const outputDirectory = config.outputDirectory ?? this.params.rootDirectory;
