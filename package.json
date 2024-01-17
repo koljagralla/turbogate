@@ -13,7 +13,9 @@
     "bundle": "ctix build"
   },
   "dependencies": {
+    "@types/js-yaml": "^4.0.9",
     "commander": "^11.1.0",
+    "js-yaml": "^4.1.0",
     "ts-node": "^10.9.2"
   },
   "peerDependencies": {

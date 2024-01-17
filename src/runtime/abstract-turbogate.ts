@@ -2,14 +2,25 @@ import * as apigateway from 'aws-cdk-lib/aws-apigateway';
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { Construct } from 'constructs';
 import * as path from 'path';
-import { ZodObject, z } from 'zod';
+import { AnyZodObject, ZodObject, ZodType, z } from 'zod';
 import { Authorizer } from '../generator/spec/zAuthorizer';
 import { HttpMethod } from '../generator/spec/zHttpMethod';
 import { EndpointConfig } from './types/configs/endpoint-config';
 import { EnvironmentDefinition } from './types/definitions/environment-defintion';
 import { LambdaRequestAuthorizerConfig } from './types/configs/lambda-request-authorizer-config';
 import { ReducedNodejsFunctionProps } from './types/reduced-props/reduced-node-js-function-props';
-import { extendZodWithOpenApi } from '@asteasolutions/zod-to-openapi';
+import {
+  OpenAPIRegistry,
+  OpenApiGeneratorV31,
+  RouteConfig,
+  extendZodWithOpenApi,
+} from '@asteasolutions/zod-to-openapi';
+import * as yaml from 'js-yaml';
+import * as fs from 'fs';
+import { RequestDefinition } from './types/definitions/request-definition';
+import { ResponsesDeclaration } from './types/response/responses-declaration';
+import { EndpointDocs } from './types/docs/endpoint-docs';
+import { OpenAPIProps } from './types/docs/openapi-props';
 
 export abstract class AbstractTurbogate<
   Resource extends string,
@@ -28,8 +39,11 @@ export abstract class AbstractTurbogate<
     >;
   };
 
+  private readonly openapiRegistry = new OpenAPIRegistry();
+
   constructor(
     private readonly scope: Construct,
+    // TODO move to own type
     private readonly params: {
       apiName: string;
       resources: Resource[];
@@ -48,11 +62,9 @@ export abstract class AbstractTurbogate<
       environmentVariables: Record<EnvironmentVariableName, string>;
       permissions: Record<PermissionName, (lambdaFn: NodejsFunction) => void>;
       apiGatewayProps?: apigateway.RestApiProps;
+      openapi?: OpenAPIProps;
     },
   ) {
-    // Ensure zod is extended with openapi
-    extendZodWithOpenApi(z);
-
     // Setup the API Gateway
     this.apiGw = new apigateway.RestApi(scope, this.id('api-gw'), this.params.apiGatewayProps);
 
@@ -63,6 +75,7 @@ export abstract class AbstractTurbogate<
     this.createResources();
     this.createLambdaRequestAuthorizerInstances();
     this.createOperationResources();
+    this.generateOpenApiSpec();
   }
 
   /** Creates the resources (in the sense of API Gateway) and stores them in the `resources` property. */
@@ -96,26 +109,47 @@ export abstract class AbstractTurbogate<
       } catch (e: any) {
         throw new Error(`Missing or corrupted config.ts file in ${lambdaRequestAuthorizer.lambdaDirectoryPath}.`);
       }
-      const lambdaFn = this.createLambda(
-        lambdaRequestAuthorizer.name,
-        lambdaRequestAuthorizer.lambdaDirectoryPath,
-        config.lambda,
-      );
-      const authorizer = new apigateway.RequestAuthorizer(
-        this.scope,
-        this.id(lambdaRequestAuthorizer.name, 'authorizer'),
-        {
-          authorizerName: this.name(lambdaRequestAuthorizer.name, 'authorizer'),
-          handler: lambdaFn,
-          ...config.requestAuthorizer,
-        },
-      );
+      try {
+        const lambdaFn = this.createLambda(
+          lambdaRequestAuthorizer.name,
+          lambdaRequestAuthorizer.lambdaDirectoryPath,
+          config.lambda,
+        );
+        const authorizer = new apigateway.RequestAuthorizer(
+          this.scope,
+          this.id(lambdaRequestAuthorizer.name, 'authorizer'),
+          {
+            authorizerName: this.name(lambdaRequestAuthorizer.name, 'authorizer'),
+            handler: lambdaFn,
+            ...config.requestAuthorizer,
+          },
+        );
 
-      this.authorizer.lambdaRequestAuthorizer[lambdaRequestAuthorizer.name] = {
-        lambdaFn: lambdaFn,
-        apigatewayRequestAuthorizer: authorizer,
-      };
+        this.authorizer.lambdaRequestAuthorizer[lambdaRequestAuthorizer.name] = {
+          lambdaFn: lambdaFn,
+          apigatewayRequestAuthorizer: authorizer,
+        };
+      } catch (e: any) {
+        console.log(`Failed to create lambda request authorizer ${lambdaRequestAuthorizer.name}: ${e.message}`);
+        process.exit(1);
+      }
     });
+  }
+
+  private loadTS<T>(accessor: string, ...relativeFilePathSegments: string[]): T {
+    const relativeFilePathJoined = relativeFilePathSegments.join('/');
+    const absolutePath = path.join(this.params.rootDirectory, relativeFilePathJoined);
+    let content;
+    try {
+      content = require(absolutePath);
+    } catch (e: any) {
+      throw new Error(`Failed to load file as TypeScript (${relativeFilePathJoined}): ${e.message}`);
+    }
+    const value = content[accessor];
+    if (value === undefined) {
+      throw new Error(`Missing exported ${accessor} in ${relativeFilePathJoined}`);
+    }
+    return value as T;
   }
 
   /**
@@ -132,29 +166,96 @@ export abstract class AbstractTurbogate<
         throw new Error(`Missing or corrupted config.ts file in ${operation.lambdaDirectoryPath}.`);
       }
 
-      const lambdaFn = this.createLambda(operation.name, operation.lambdaDirectoryPath, config.lambda);
-      this.operations[operation.name] = { lambdaFn };
+      try {
+        const lambdaFn = this.createLambda(operation.name, operation.lambdaDirectoryPath, config.lambda);
+        this.operations[operation.name] = { lambdaFn };
 
-      let methodOptions: apigateway.MethodOptions = {};
+        let methodOptions: apigateway.MethodOptions = {};
 
-      if (operation.authorizer) {
-        if (operation.authorizer.authorizerType === 'lambdaRequestAuthorizer') {
-          methodOptions = {
-            authorizationType: apigateway.AuthorizationType.CUSTOM,
-            authorizer:
-              this.authorizer.lambdaRequestAuthorizer[operation.authorizer.authorizerName].apigatewayRequestAuthorizer,
-          };
-        } else {
-          throw new Error(`Unknown authorizer type: ${operation.authorizer.authorizerType}`);
+        if (operation.authorizer) {
+          if (operation.authorizer.authorizerType === 'lambdaRequestAuthorizer') {
+            methodOptions = {
+              authorizationType: apigateway.AuthorizationType.CUSTOM,
+              authorizer:
+                this.authorizer.lambdaRequestAuthorizer[operation.authorizer.authorizerName]
+                  .apigatewayRequestAuthorizer,
+            };
+          } else {
+            throw new Error(`Unknown authorizer type: ${operation.authorizer.authorizerType}`);
+          }
         }
-      }
 
-      this.resources[operation.path].addMethod(
-        operation.method,
-        new apigateway.LambdaIntegration(lambdaFn, config.integration),
-        methodOptions,
-      );
+        this.resources[operation.path].addMethod(
+          operation.method,
+          new apigateway.LambdaIntegration(lambdaFn, config.integration),
+          methodOptions,
+        );
+
+        const request = this.loadTS<AnyZodObject>('zRequest', operation.lambdaDirectoryPath, 'request.ts');
+        const responses = this.loadTS<ResponsesDeclaration>('responses', operation.lambdaDirectoryPath, 'responses.ts');
+        const docs = this.loadTS<EndpointDocs>('docs', operation.lambdaDirectoryPath, 'docs.ts');
+        const parsedResponses: RouteConfig['responses'] = {};
+        Object.entries(responses).forEach(([statusCode, response]) => {
+          parsedResponses[statusCode] =
+            'schema' in response
+              ? {
+                  description: response.description!,
+                  content: {
+                    'application/json': {
+                      schema: response.schema,
+                    },
+                  },
+                }
+              : {
+                  description: response.description!,
+                };
+        });
+
+        this.openapiRegistry.registerPath({
+          ...docs,
+          method: operation.method.toLowerCase() as any,
+          path: operation.path,
+          request: {
+            body: {
+              content: {
+                'application/json': {
+                  schema: request.shape.body,
+                },
+              },
+            },
+            query: request.shape.queryParameters,
+            headers: request.shape.headers,
+            params: request.shape.pathParameters,
+          },
+          responses: parsedResponses,
+        });
+      } catch (e: any) {
+        console.log(`Failed to setup endpoint lambda ${operation.name}: ${e.message}`);
+        process.exit(1);
+      }
     });
+  }
+
+  private generateOpenApiSpec() {
+    const config = this.params.openapi;
+
+    if (!config) {
+      return;
+    }
+
+    const generator = new OpenApiGeneratorV31(this.openapiRegistry.definitions);
+    const document = generator.generateDocument({
+      openapi: '3.1.0',
+      info: {
+        title: 'Hello World Title',
+        version: '0.0.X',
+      },
+    });
+    const documentYaml = yaml.dump(document);
+    const outputDirectory = config.outputDirectory ?? this.params.rootDirectory;
+    const fileName = config.fileName ?? 'openapi.yaml';
+    const filePath = path.join(outputDirectory, fileName);
+    fs.writeFileSync(filePath, documentYaml);
   }
 
   private createLambda(name: string, directoryPath: string, props: ReducedNodejsFunctionProps = {}) {

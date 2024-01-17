@@ -253,11 +253,13 @@ ${Object.entries(data)
 
     const template = `\
 ${buildGeneratedCodeDisclaimerComment(mainGeneratedCodeDisclaimer)}
+import { extendZodWithOpenApi } from '@asteasolutions/zod-to-openapi';
 import { Construct } from 'constructs';
-import { AbstractTurbogate, PermissionCallback } from 'turbogate';
+import { AbstractTurbogate, OpenAPIProps, PermissionCallback } from 'turbogate';
+import { z } from 'zod';
+import { apiGwConfig } from "./config/api-gw-config";
 ${environmentTypesImportStatements.join('\n')}
 ${permissionConstImportStatements.join('\n')}
-import { apiGwConfig } from "./config/api-gw-config";
 
 type Resource = ${allResources.map(resource => `'${resource}'`).join(' | ')};
 type OperationName = ${operationNames.map(operation => `'${operation}'`).join(' | ')};
@@ -288,10 +290,20 @@ export class ${name}Turbogate extends AbstractTurbogate<
        * resource IDs and thus needs to be unique accross all instances of this turbogate.
        */
       apiName?: string,
+
+      /**
+       * Set this to enable the OpenAPI documentation generation. Pass in an empty object to generate with default values.
+       */
+      openapi?: OpenAPIProps,
     }
   ) {
+    // Ensure zod is extended with openapi, needs to be called before super constructor
+		extendZodWithOpenApi(z);
+
+    const { apiName, environment, permissions, openapi } = params;
+
 		super(scope, {
-      apiName: params.apiName || '${this.apiConfig.meta.name}',
+      apiName: apiName || '${this.apiConfig.meta.name}',
       resources: [${allResources.map(resource => `'${resource}'`).join(', ')}],
 			rootDirectory: __dirname,
       operations: [
@@ -300,9 +312,10 @@ export class ${name}Turbogate extends AbstractTurbogate<
 			lambdaRequestAuthorizers: [
         ${lambdaAuthorizers.join(',\n\t\t\t\t')}
 			],
-      environmentVariables: params.environment,
-      permissions: params.permissions,
+      environmentVariables: environment,
+      permissions,
       apiGatewayProps: apiGwConfig,
+      openapi,
 		});
 	}
 }`;

@@ -8,7 +8,7 @@ import { ResponsesDeclaration } from '../../../../runtime/types/response/respons
 
 export const http501NotImplemented = {
   501: {
-    description: 'Not implemented',
+    description: 'Not implemented.',
   },
 } as const satisfies ResponsesDeclaration;
 
