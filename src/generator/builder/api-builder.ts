@@ -47,6 +47,7 @@ export class ApiBuilder {
 
     this.copyConfigTemplates();
     this.copyShared();
+    this.copyApiDocs();
 
     // Iterates the paths
     Object.entries(apiConfig.endpoints).forEach(([endpointPath, endpoint]) => {
@@ -108,6 +109,19 @@ export class ApiBuilder {
   private copyShared(): void {
     const sharedFolderPath = path.join(this.templateFolderPath, '_root/shared');
     copyTemplate(`${sharedFolderPath}`, `${this.config.rootDirectory}/shared`);
+  }
+
+  private copyApiDocs(): void {
+    const sharedFolderPath = path.join(this.templateFolderPath, '_root/docs');
+    copyTemplate(`${sharedFolderPath}`, `${this.config.rootDirectory}`);
+
+    // TODO this is a quick and dirty to replace the API name in the docs.ts file, should probably be a function in copyTemplate
+    const content = fs.readFileSync(`${this.config.rootDirectory}/docs.ts`, 'utf-8');
+    const contentWithCorrectApiName = content.replace(
+      'My API',
+      this.apiConfig.meta.name.replace('-', ' ').toUpperCase(),
+    );
+    fs.writeFileSync(`${this.config.rootDirectory}/docs.ts`, contentWithCorrectApiName);
   }
 
   /** Registers a resource and all its parent resources. */
