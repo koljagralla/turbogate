@@ -8,7 +8,7 @@
   },
   "author": "Kolja Gralla",
   "license": "MIT",
-  "private": true,
+  "private": false,
   "scripts": {
     "bundle": "ctix build"
   },
