@@ -15,7 +15,7 @@ import { zAuthorizerContext } from './authorizer';
 import { zEnvironment } from './environment';
 import { main } from './main';
 import { Request, zRequest } from './request';
-import * as _ from '../../production/openapi/faux-extend-zod-with-open-api';
+import { _ } from '../../production/openapi/faux-extend-zod-with-open-api';
 
 export const handler = async (rawRequest: RawRequest, context: Context): Promise<APIGatewayProxyResult> => {
   _; // This need to be in the code so the fauxExtendZodWithOpenApi is not tree shaken.
