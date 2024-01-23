@@ -7,7 +7,7 @@
     "./local": "./src/local/index.ts"
   },
   "bin": {
-    "turbogate": "src/generator/private/cli.ts"
+    "turbogate": "src/local/cli.ts"
   },
   "author": "Kolja Gralla",
   "license": "MIT",
