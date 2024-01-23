@@ -1,22 +1,22 @@
-import { OpenAPIRegistry, OpenApiGeneratorV31, RouteConfig } from '@asteasolutions/zod-to-openapi';
 import * as apigateway from 'aws-cdk-lib/aws-apigateway';
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { Construct } from 'constructs';
-import * as fs from 'fs';
-import * as yaml from 'js-yaml';
 import * as path from 'path';
-import { AnyZodObject, ZodObject } from 'zod';
+import { AnyZodObject, ZodObject, ZodType, z } from 'zod';
 import { Authorizer } from '../generator/spec/zAuthorizer';
 import { HttpMethod } from '../generator/spec/zHttpMethod';
 import { EndpointConfig } from './types/configs/endpoint-config';
-import { LambdaRequestAuthorizerConfig } from './types/configs/lambda-request-authorizer-config';
 import { EnvironmentDefinition } from './types/definitions/environment-defintion';
-import { ApiDocs } from './types/docs/api-docs';
-import { AuthorizerDocs } from './types/docs/authorizer-docs';
+import { LambdaRequestAuthorizerConfig } from './types/configs/lambda-request-authorizer-config';
+import { ReducedNodejsFunctionProps } from './types/reduced-props/reduced-node-js-function-props';
+import { OpenAPIRegistry, OpenApiGeneratorV31, RouteConfig } from '@asteasolutions/zod-to-openapi';
+import * as yaml from 'js-yaml';
+import * as fs from 'fs';
+import { ResponsesDeclaration } from './types/response/responses-declaration';
 import { EndpointDocs } from './types/docs/endpoint-docs';
 import { OpenAPIProps } from './types/docs/openapi-props';
-import { ReducedNodejsFunctionProps } from './types/reduced-props/reduced-node-js-function-props';
-import { ResponsesDeclaration } from './types/response/responses-declaration';
+import { ApiDocs } from './types/docs/api-docs';
+import { AuthorizerDocs } from './types/docs/authorizer-docs';
 
 export abstract class AbstractTurbogate<
   Resource extends string,

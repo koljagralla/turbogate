@@ -9,11 +9,13 @@ let alreadyExtended = false;
  * @see https://github.com/asteasolutions/zod-to-openapi?tab=readme-ov-file#the-openapi-method
  */
 export function fauxExtendZodWithOpenApi(zod: typeof z): void {
+  console.log('fauxExtendZodWithOpenApi');
   if (alreadyExtended) {
     return;
   }
   (zod.ZodType.prototype as any).openapi = function (this: any, ...args: any[]) {
     return this;
   };
+  console.log('extended!');
   alreadyExtended = true;
 }
