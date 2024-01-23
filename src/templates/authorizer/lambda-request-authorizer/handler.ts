@@ -5,7 +5,7 @@ import {
   GeneratedCodeDisclaimer,
   RecreationBehavior,
 } from '../../../local/util/generated-doc-data';
-import * as _ from '../../../production/openapi/faux-extend-zod-with-open-api';
+import { _ } from '../../../production/openapi/faux-extend-zod-with-open-api';
 import { parseEnvironment } from '../../../production/parser/parse-environment';
 import { LambdaAuthorizerInputEvent } from '../../../production/types/missing-aws-types/lambda-authorizer-input-event';
 import { LambdaAuthorizerResponse } from '../../../production/types/missing-aws-types/lambda-authorizer-response';

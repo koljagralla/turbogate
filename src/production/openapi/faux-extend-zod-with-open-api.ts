@@ -18,4 +18,4 @@ function fauxExtendZodWithOpenApi(zod: typeof z): void {
 fauxExtendZodWithOpenApi(z);
 
 // Export something so we can import this file in the handler.ts
-export default undefined;
+export const _ = undefined;
