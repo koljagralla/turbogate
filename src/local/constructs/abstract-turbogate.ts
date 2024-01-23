@@ -219,13 +219,16 @@ export abstract class AbstractTurbogate<
           method: operation.method.toLowerCase() as any,
           path: operation.path,
           request: {
-            body: {
-              content: {
-                'application/json': {
-                  schema: request.shape.body,
-                },
-              },
-            },
+            body:
+              request.shape.body._def.typeName === 'ZodUndefined'
+                ? undefined
+                : {
+                    content: {
+                      'application/json': {
+                        schema: request.shape.body,
+                      },
+                    },
+                  },
             query: request.shape.queryParameters,
             headers: request.shape.headers,
             params: request.shape.pathParameters,
