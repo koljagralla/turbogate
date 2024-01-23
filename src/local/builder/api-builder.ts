@@ -267,9 +267,8 @@ ${Object.entries(data)
 
     const template = `\
 ${buildGeneratedCodeDisclaimerComment(mainGeneratedCodeDisclaimer)}
-import { extendZodWithOpenApi } from '@asteasolutions/zod-to-openapi';
 import { Construct } from 'constructs';
-import { AbstractTurbogate, OpenAPIProps, PermissionCallback } from 'turbogate/local';
+import { AbstractTurbogate, OpenAPIProps, PermissionCallback, handleExtendZodWithOpenApi } from 'turbogate/local';
 import { z } from 'zod';
 import { apiGwConfig } from "./config/api-gw-config";
 ${environmentTypesImportStatements.join('\n')}
@@ -311,8 +310,6 @@ export class ${name}Turbogate extends AbstractTurbogate<
       openapi?: OpenAPIProps,
     }
   ) {
-    // Ensure zod is extended with openapi, needs to be called before super constructor
-		extendZodWithOpenApi(z);
 
     const { apiName, environment, permissions, openapi } = params;
 

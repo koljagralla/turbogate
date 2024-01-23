@@ -18,6 +18,7 @@
       "include": [
         "./src/local/spec/**/*.ts",
         "./src/local/constructs/**/*.ts",
+        "./src/local/util/extend-zod-with-open-api.ts",
         "./src/production/**/*.ts"
       ],
       "exclude": [
