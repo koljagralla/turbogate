@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-let alreadyExtended = false;
+
 /**
  * This mocks the extendZodWithOpenApi method from @asteasolutions/zod-to-openapi. We neither need nor want the
  * zod-to-openapi functions in production code. However, we do want to use the openapi method in our data model
@@ -8,14 +8,14 @@ let alreadyExtended = false;
  *
  * @see https://github.com/asteasolutions/zod-to-openapi?tab=readme-ov-file#the-openapi-method
  */
-export function fauxExtendZodWithOpenApi(zod: typeof z): void {
-  console.log('fauxExtendZodWithOpenApi');
-  if (alreadyExtended) {
-    return;
-  }
+function fauxExtendZodWithOpenApi(zod: typeof z): void {
   (zod.ZodType.prototype as any).openapi = function (this: any, ...args: any[]) {
     return this;
   };
-  console.log('extended!');
-  alreadyExtended = true;
 }
+
+// This gets called when this file imported in the handler.ts
+fauxExtendZodWithOpenApi(z);
+
+// Export something so we can import this file in the handler.ts
+export default undefined;
