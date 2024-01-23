@@ -5,7 +5,7 @@ import {
   GeneratedCodeDisclaimer,
   RecreationBehavior,
 } from '../../../local/util/generated-doc-data';
-import { _ } from '../../../production/openapi/faux-extend-zod-with-open-api';
+import { handleFauxExtendZodWithOpenApi } from '../../../production/openapi/faux-extend-zod-with-open-api';
 import { parseEnvironment } from '../../../production/parser/parse-environment';
 import { LambdaAuthorizerInputEvent } from '../../../production/types/missing-aws-types/lambda-authorizer-input-event';
 import { LambdaAuthorizerResponse } from '../../../production/types/missing-aws-types/lambda-authorizer-response';
@@ -14,7 +14,7 @@ import { zEnvironment } from './environment';
 import { main } from './main';
 
 export const handler = async (event: LambdaAuthorizerInputEvent): Promise<LambdaAuthorizerResponse<any, any>> => {
-  _; // This need to be in the code so the fauxExtendZodWithOpenApi is not tree shaken.
+  handleFauxExtendZodWithOpenApi; // This need to be in the code so the fauxExtendZodWithOpenApi is not tree shaken.
 
   const environment = parseEnvironment(zEnvironment);
 
