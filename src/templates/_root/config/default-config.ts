@@ -10,16 +10,21 @@ import {
 
 export const defaultConfig: EndpointConfig & LambdaRequestAuthorizerConfig = {
   lambda: {
-    runtime: lambda.Runtime.NODEJS_16_X,
+    runtime: lambda.Runtime.NODEJS_18_X,
     bundling: {
       minify: true,
-      externalModules: ['aws-sdk'],
+      externalModules: ['@aws-sdk/*'],
+      sourceMap: true,
+    },
+    environment: {
+      NODE_OPTIONS: '--enable-source-maps',
     },
   },
   integration: {},
   requestAuthorizer: {
     // CDK has this field as required, in Cfn it is not.
     // So we need to set it to an empty array so TS doesn't complain.
+    // However, when you try to deploy this, CDK will complain about the empty array.
     identitySources: [],
   },
 };
