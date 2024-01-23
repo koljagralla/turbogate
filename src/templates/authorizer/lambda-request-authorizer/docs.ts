@@ -3,8 +3,8 @@ import {
   Editability,
   GeneratedCodeDisclaimer,
   RecreationBehavior,
-} from '../../../generator/util/generated-doc-data';
-import { AuthorizerDocs } from '../../../runtime/types/docs/authorizer-docs';
+} from '../../../local/util/generated-doc-data';
+import { AuthorizerDocs } from '../../../production/types/docs/authorizer-docs';
 
 export const docs: AuthorizerDocs = {
   // Example docs for JWT Bearer auth.

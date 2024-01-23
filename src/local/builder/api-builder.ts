@@ -269,7 +269,7 @@ ${Object.entries(data)
 ${buildGeneratedCodeDisclaimerComment(mainGeneratedCodeDisclaimer)}
 import { extendZodWithOpenApi } from '@asteasolutions/zod-to-openapi';
 import { Construct } from 'constructs';
-import { AbstractTurbogate, OpenAPIProps, PermissionCallback } from 'turbogate';
+import { AbstractTurbogate, OpenAPIProps, PermissionCallback } from 'turbogate/local';
 import { z } from 'zod';
 import { apiGwConfig } from "./config/api-gw-config";
 ${environmentTypesImportStatements.join('\n')}

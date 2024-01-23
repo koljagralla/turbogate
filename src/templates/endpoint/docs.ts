@@ -3,8 +3,8 @@ import {
   Editability,
   GeneratedCodeDisclaimer,
   RecreationBehavior,
-} from '../../generator/util/generated-doc-data';
-import { EndpointDocs } from '../../runtime/types/docs/endpoint-docs';
+} from '../../local/util/generated-doc-data';
+import { EndpointDocs } from '../../production/types/docs/endpoint-docs';
 
 export const docs: EndpointDocs = {
   // Example docs:

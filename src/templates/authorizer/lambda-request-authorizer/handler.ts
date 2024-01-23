@@ -4,12 +4,12 @@ import {
   Editability,
   GeneratedCodeDisclaimer,
   RecreationBehavior,
-} from '../../../generator/util/generated-doc-data';
-import { fauxExtendZodWithOpenApi } from '../../../runtime/openapi/faux-extend-zod-with-open-api';
-import { parseEnvironment } from '../../../runtime/parser/parse-environment';
-import { LambdaAuthorizerInputEvent } from '../../../runtime/types/missing-aws-types/lambda-authorizer-input-event';
-import { LambdaAuthorizerResponse } from '../../../runtime/types/missing-aws-types/lambda-authorizer-response';
-import { LambdaAuthorizerUtil } from '../../../runtime/util/lambda-authorizer-util';
+} from '../../../local/util/generated-doc-data';
+import { fauxExtendZodWithOpenApi } from '../../../production/openapi/faux-extend-zod-with-open-api';
+import { parseEnvironment } from '../../../production/parser/parse-environment';
+import { LambdaAuthorizerInputEvent } from '../../../production/types/missing-aws-types/lambda-authorizer-input-event';
+import { LambdaAuthorizerResponse } from '../../../production/types/missing-aws-types/lambda-authorizer-response';
+import { LambdaAuthorizerUtil } from '../../../production/util/lambda-authorizer-util';
 import { zEnvironment } from './environment';
 import { main } from './main';
 

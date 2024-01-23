@@ -3,8 +3,8 @@ import {
   Editability,
   GeneratedCodeDisclaimer,
   RecreationBehavior,
-} from '../../../generator/util/generated-doc-data';
-import { ApiDocs } from '../../../runtime/types/docs/api-docs';
+} from '../../../local/util/generated-doc-data';
+import { ApiDocs } from '../../../production/types/docs/api-docs';
 
 export const docs: ApiDocs = {
   info: {

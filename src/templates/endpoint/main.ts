@@ -1,4 +1,4 @@
-import { HttpStatus } from '../../runtime/http-status-codes';
+import { HttpStatus } from '../../production/http-status-codes';
 import { AuthorizerContext } from './authorizer';
 import { Environment } from './environment';
 import { Request } from './request';
@@ -9,7 +9,7 @@ import {
   Editability,
   GeneratedCodeDisclaimer,
   RecreationBehavior,
-} from '../../generator/util/generated-doc-data';
+} from '../../local/util/generated-doc-data';
 
 export async function main(
   environment: Environment,

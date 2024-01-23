@@ -3,8 +3,8 @@ import {
   Editability,
   GeneratedCodeDisclaimer,
   RecreationBehavior,
-} from '../../generator/util/generated-doc-data';
-import { EndpointConfig } from '../../runtime/types/configs/endpoint-config';
+} from '../../local/util/generated-doc-data';
+import { EndpointConfig } from '../../production/types/configs/endpoint-config';
 import { defaultConfig } from '../_root/config/default-config';
 
 export const config: EndpointConfig = {

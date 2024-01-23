@@ -4,7 +4,7 @@ import {
   Editability,
   GeneratedCodeDisclaimer,
   RecreationBehavior,
-} from '../../generator/util/generated-doc-data';
+} from '../../local/util/generated-doc-data';
 
 export const zAuthorizerContext = z.undefined();
 export type AuthorizerContext = void;

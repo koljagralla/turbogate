@@ -6,7 +6,6 @@
     {
       "mode": "bundle",
       "project": "tsconfig.json",
-      "exportFilename": "index.ts",
       "useSemicolon": true,
       "useBanner": false,
       "useTimestamp": false,
@@ -17,14 +16,17 @@
       "backup": false,
       "generationStyle": "auto",
       "include": [
-        "./src/runtime/**/*.ts",
-        "./src/generator/spec/**/*.ts"
+        "./src/local/spec/**/*.ts",
+        "./src/local/constructs/**/*.ts",
+        "./src/production/**/*.ts"
       ],
-      "exclude": [],
+      "exclude": [
+        "./src/production/index.ts"
+      ],
       "skipEmptyDir": true,
       "removeBackup": false,
       "forceYes": false,
-      "output": "./src"
+      "output": "./src/local"
     }
   ]
 }
