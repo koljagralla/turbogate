@@ -8,6 +8,7 @@ export * from './generator/spec/zName';
 export * from './generator/spec/zPath';
 export * from './generator/spec/zTurbogateSpec';
 export * from './runtime/openapi/faux-extend-zod-with-open-api';
+export * from './runtime/openapi/mock-openapi-method';
 export * from './runtime/parser/parse-authorizer-context';
 export * from './runtime/parser/parse-environment';
 export * from './runtime/parser/parse-request';
