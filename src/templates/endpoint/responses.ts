@@ -1,14 +1,14 @@
 import { http400ValidationError } from '../_root/shared/responses/http-400-validation-error';
 import { http500InternalServerError } from '../_root/shared/responses/http-500-internal-server-error';
 import { http501NotImplemented } from '../_root/shared/responses/http-501-not-implemented';
-import { ResponsesDeclaration } from '../../runtime/types/response/responses-declaration';
-import { InferResponseFromResponsesDeclaration } from '../../runtime/types/response/infer-response-from-response-declaration';
+import { ResponsesDeclaration } from '../../production/types/response/responses-declaration';
+import { InferResponseFromResponsesDeclaration } from '../../production/types/response/infer-response-from-response-declaration';
 import {
   Deletability,
   Editability,
   GeneratedCodeDisclaimer,
   RecreationBehavior,
-} from '../../generator/util/generated-doc-data';
+} from '../../local/util/generated-doc-data';
 import { z } from 'zod';
 
 export const responses = {

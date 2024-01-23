@@ -54,6 +54,14 @@ Turbogate heavily utizilizes [Zod](https://github.com/colinhacks/zod) to define 
 
 It is also a good idea to have a look at [zod-to-openapi](https://github.com/asteasolutions/zod-to-openapi) in case you want to make use of the OpenAPI spec generation feature. You do not need to set anything up, everything is wired up for you. But you should know the [`.openapi(...)`-method](https://github.com/asteasolutions/zod-to-openapi?tab=readme-ov-file#the-openapi-method)
 
+The `moduleResolution` in your `tsconfig.json` needs to be set to `Node16` (or another supported strategy, see *Why?*). You need to set the `module` field accordingly (e.g. also `Node16`).
+<details>
+<summary>Why?</summary>
+
+> [!NOTE]
+> Turbogate uses the [NodejsFunction construct](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_lambda_nodejs-readme.html) that uses ESBuild to automatically transpile, bundle and minify the lambda handlers written in TS. Currently ESBuild will bundle all exports from an index files as soon as you import one export (see [here](https://github.com/evanw/esbuild/issues/1794)). So to not blow up the deployed lambdas to 10MB+ sizes due to bundling the complete CDK package (and others) due to importing some files from turbogate we need to expose two different entrypoints. One for use in the IaC code and one for the lambdas production code. To be able to do so we need the `exports` field in the `package.json` which TypeScript only understands when in certain module resolution strategies (see [here](https://stackoverflow.com/a/74485520)).
+</details>
+
 ### 1. Installation
 Turbogate three dev peer dependencies. You most probably will already have some of them installed in a Typescript CDK project.
 

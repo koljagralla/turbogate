@@ -17,7 +17,7 @@ export function buildSpec(name: string) {
   };
   return `\
 ${buildGeneratedCodeDisclaimerComment(generatedCodeDisclaimer)}
-import { TurbogateSpec } from 'turbogate';
+import { TurbogateSpec } from 'turbogate/local';
 
 const spec: TurbogateSpec = {
 	meta: {

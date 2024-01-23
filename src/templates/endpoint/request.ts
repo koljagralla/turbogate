@@ -1,11 +1,11 @@
 import { ZodType, z } from 'zod';
-import { RequestDefinition } from '../../runtime/types/definitions/request-definition';
+import { RequestDefinition } from '../../production/types/definitions/request-definition';
 import {
   Deletability,
   Editability,
   GeneratedCodeDisclaimer,
   RecreationBehavior,
-} from '../../generator/util/generated-doc-data';
+} from '../../local/util/generated-doc-data';
 
 export const description = '';
 
