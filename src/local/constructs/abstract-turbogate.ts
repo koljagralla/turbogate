@@ -273,7 +273,7 @@ export abstract class AbstractTurbogate<
       functionName: this.name(name, 'lambda'),
       entry: path.join(this.params.rootDirectory, `/${directoryPath}/handler.ts`),
       ...props,
-      environment: { ...this.createEnvironmentConfig(directoryPath), ...props.environment },
+      environment: { ...props.environment, ...this.createEnvironmentConfig(directoryPath) },
     });
 
     try {
