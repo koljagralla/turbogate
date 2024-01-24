@@ -17,7 +17,6 @@ import { EndpointDocs } from '../../production/types/docs/endpoint-docs';
 import { OpenAPIProps } from '../../production/types/docs/openapi-props';
 import { ApiDocs } from '../../production/types/docs/api-docs';
 import { AuthorizerDocs } from '../../production/types/docs/authorizer-docs';
-import { extendZodWithOpenApi } from '@asteasolutions/zod-to-openapi';
 
 export abstract class AbstractTurbogate<
   Resource extends string,
@@ -62,9 +61,6 @@ export abstract class AbstractTurbogate<
       openapi?: OpenAPIProps;
     },
   ) {
-    // Ensure Zod is extended with the openapi method
-    extendZodWithOpenApi(z);
-
     // Setup the API Gateway
     this.apiGw = new apigateway.RestApi(scope, this.id('api-gw'), this.params.apiGatewayProps);
 

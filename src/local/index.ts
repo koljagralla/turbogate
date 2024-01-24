@@ -8,6 +8,7 @@ export * from './spec/zName';
 export * from './spec/zPath';
 export * from './spec/zTurbogateSpec';
 export * from './util/extend-zod-with-open-api';
+export * from './util/wire-turbogate';
 export * from '../production/openapi/faux-extend-zod-with-open-api';
 export * from '../production/parser/parse-authorizer-context';
 export * from '../production/parser/parse-environment';
