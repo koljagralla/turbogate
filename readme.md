@@ -80,7 +80,7 @@ yarn add zod
 Then install the main package:
 
 ```bash
-yarn add koljagralla/turbogate
+yarn add turbogate
 ```
 
 > [!NOTE]
