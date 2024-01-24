@@ -340,7 +340,7 @@ const authorizerGeneratedCodeDisclaimer: GeneratedCodeDisclaimer = {
     'This file links your endpoint to the authorizer so a validated authorizer context can be provided in main.ts if an authorizer is specified.',
   canBeEdited: Editability.NO_REGENERATED,
   canBePermanentlyDeleted: Deletability.NO_GENERATED_CODE_WILL_BREAK,
-  willBeRecreated: RecreationBehavior.ON_TURBOGATE_BUILD_WHEN_DELETED,
+  willBeRecreated: RecreationBehavior.ON_EVERY_TURBOGATE_BUILD,
 };
 
 const mainGeneratedCodeDisclaimer: GeneratedCodeDisclaimer = {
