@@ -1,28 +1,24 @@
-import { copyTemplate } from '../../util/copy-template-directory';
-import { TurbogateSpec, zTurbogateSpec } from '../config/zTurbogateSpec';
+import { copyTemplate } from '../util/copy-template-directory';
+import { TurbogateSpec, zTurbogateSpec } from '../spec/zTurbogateSpec';
 import * as fs from 'fs';
 import path from 'path';
-import { Authorizer } from '../config/zAuthorizer';
-import { HttpMethod } from '../config/zHttpMethod';
-import {
-  Deletability,
-  Editability,
-  GeneratedCodeDisclaimer,
-  RecreationBehavior,
-} from '../../private/generated-doc-data';
-import { buildGeneratedCodeDisclaimerComment } from '../../util/build-generated-doc-disclaimer-comment';
+import { Authorizer } from '../spec/zAuthorizer';
+import { HttpMethod } from '../spec/zHttpMethod';
+import { Deletability, Editability, GeneratedCodeDisclaimer, RecreationBehavior } from '../util/generated-doc-data';
+import { buildGeneratedCodeDisclaimerComment } from '../util/build-generated-doc-disclaimer-comment';
 
 export type ApiBuilderConfig = {
   rootDirectory: string;
   configFileName: string;
   endpointStructure: 'byResource' | 'allTogether';
 };
-
 export class ApiBuilder {
   constructor(private readonly config: ApiBuilderConfig) {}
 
   private apiConfig: TurbogateSpec;
   private createdLambdaRequestAuthorizers: Set<string> = new Set();
+
+  private readonly templateFolderPath = path.join(__dirname, '../../templates');
 
   private readonly usedResources: Set<string> = new Set();
   private readonly allResources: Set<string> = new Set();
@@ -47,10 +43,11 @@ export class ApiBuilder {
   public async build(): Promise<void> {
     const apiConfig = await this.loadApiConfig();
     this.apiConfig = apiConfig;
-    const endpointTemplateFolderPath = path.join(__dirname, '../../../templates/endpoint');
+    const endpointTemplateFolderPath = path.join(this.templateFolderPath, 'endpoint');
 
     this.copyConfigTemplates();
     this.copyShared();
+    this.copyApiDocs();
 
     // Iterates the paths
     Object.entries(apiConfig.endpoints).forEach(([endpointPath, endpoint]) => {
@@ -105,13 +102,26 @@ export class ApiBuilder {
   }
 
   private copyConfigTemplates(): void {
-    const rootTemplateFolderPath = path.join(__dirname, '../../../templates/_root/config');
+    const rootTemplateFolderPath = path.join(this.templateFolderPath, '_root/config');
     copyTemplate(`${rootTemplateFolderPath}`, `${this.config.rootDirectory}/config`);
   }
 
   private copyShared(): void {
-    const sharedFolderPath = path.join(__dirname, '../../../templates/_root/shared');
+    const sharedFolderPath = path.join(this.templateFolderPath, '_root/shared');
     copyTemplate(`${sharedFolderPath}`, `${this.config.rootDirectory}/shared`);
+  }
+
+  private copyApiDocs(): void {
+    const sharedFolderPath = path.join(this.templateFolderPath, '_root/docs');
+    copyTemplate(`${sharedFolderPath}`, `${this.config.rootDirectory}`);
+
+    // TODO this is a quick and dirty to replace the API name in the docs.ts file, should probably be a function in copyTemplate
+    const content = fs.readFileSync(`${this.config.rootDirectory}/docs.ts`, 'utf-8');
+    const contentWithCorrectApiName = content.replace(
+      'My API',
+      this.apiConfig.meta.name.replaceAll('-', ' ').toUpperCase(),
+    );
+    fs.writeFileSync(`${this.config.rootDirectory}/docs.ts`, contentWithCorrectApiName);
   }
 
   /** Registers a resource and all its parent resources. */
@@ -145,8 +155,8 @@ export type AuthorizerContext = void;`;
           // Copy the authorizer template to the authorizers folder
           const thisAuthorizerDirectoryPathFull = this.getAuthorizerPath(authorizerName, 'full');
           const authorizerTemplateFolderPath = path.join(
-            __dirname,
-            '../../../templates/authorizer/lambda-request-authorizer',
+            this.templateFolderPath,
+            'authorizer/lambda-request-authorizer',
           );
           copyTemplate(authorizerTemplateFolderPath, thisAuthorizerDirectoryPathFull, 2);
 
@@ -258,10 +268,11 @@ ${Object.entries(data)
     const template = `\
 ${buildGeneratedCodeDisclaimerComment(mainGeneratedCodeDisclaimer)}
 import { Construct } from 'constructs';
-import { AbstractTurbogate, PermissionCallback } from 'turbogate';
+import { AbstractTurbogate, OpenAPIProps, PermissionCallback, handleExtendZodWithOpenApi } from 'turbogate/local';
+import { z } from 'zod';
+import { apiGwConfig } from "./config/api-gw-config";
 ${environmentTypesImportStatements.join('\n')}
 ${permissionConstImportStatements.join('\n')}
-import { apiGwConfig } from "./config/api-gw-config";
 
 type Resource = ${allResources.map(resource => `'${resource}'`).join(' | ')};
 type OperationName = ${operationNames.map(operation => `'${operation}'`).join(' | ')};
@@ -292,10 +303,18 @@ export class ${name}Turbogate extends AbstractTurbogate<
        * resource IDs and thus needs to be unique accross all instances of this turbogate.
        */
       apiName?: string,
+
+      /**
+       * Set this to enable the OpenAPI documentation generation. Pass in an empty object to generate with default values.
+       */
+      openapi?: OpenAPIProps,
     }
   ) {
+
+    const { apiName, environment, permissions, openapi } = params;
+
 		super(scope, {
-      apiName: params.apiName || '${this.apiConfig.meta.name}',
+      apiName: apiName || '${this.apiConfig.meta.name}',
       resources: [${allResources.map(resource => `'${resource}'`).join(', ')}],
 			rootDirectory: __dirname,
       operations: [
@@ -304,9 +323,10 @@ export class ${name}Turbogate extends AbstractTurbogate<
 			lambdaRequestAuthorizers: [
         ${lambdaAuthorizers.join(',\n\t\t\t\t')}
 			],
-      environmentVariables: params.environment,
-      permissions: params.permissions,
+      environmentVariables: environment,
+      permissions,
       apiGatewayProps: apiGwConfig,
+      openapi,
 		});
 	}
 }`;
@@ -320,7 +340,7 @@ const authorizerGeneratedCodeDisclaimer: GeneratedCodeDisclaimer = {
     'This file links your endpoint to the authorizer so a validated authorizer context can be provided in main.ts if an authorizer is specified.',
   canBeEdited: Editability.NO_REGENERATED,
   canBePermanentlyDeleted: Deletability.NO_GENERATED_CODE_WILL_BREAK,
-  willBeRecreated: RecreationBehavior.ON_TURBOGATE_BUILD_WHEN_DELETED,
+  willBeRecreated: RecreationBehavior.ON_EVERY_TURBOGATE_BUILD,
 };
 
 const mainGeneratedCodeDisclaimer: GeneratedCodeDisclaimer = {

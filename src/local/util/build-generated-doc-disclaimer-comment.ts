@@ -1,5 +1,5 @@
 import { Constants } from '../../constants';
-import { GeneratedCodeDisclaimer } from '../private/generated-doc-data';
+import { GeneratedCodeDisclaimer } from './generated-doc-data';
 
 export function buildGeneratedCodeDisclaimerComment(generatedCodeDisclaimer: GeneratedCodeDisclaimer) {
   let comment = `\

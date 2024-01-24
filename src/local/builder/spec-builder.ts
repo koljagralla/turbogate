@@ -1,6 +1,6 @@
-import { Deletability, Editability, GeneratedCodeDisclaimer } from '../../private/generated-doc-data';
-import { buildGeneratedCodeDisclaimerComment } from '../../util/build-generated-doc-disclaimer-comment';
-import { zName } from '../config/zName';
+import { Deletability, Editability, GeneratedCodeDisclaimer } from '../util/generated-doc-data';
+import { buildGeneratedCodeDisclaimerComment } from '../util/build-generated-doc-disclaimer-comment';
+import { zName } from '../spec/zName';
 
 export function buildSpec(name: string) {
   try {
@@ -17,7 +17,7 @@ export function buildSpec(name: string) {
   };
   return `\
 ${buildGeneratedCodeDisclaimerComment(generatedCodeDisclaimer)}
-import { TurbogateSpec } from 'turbogate';
+import { TurbogateSpec } from 'turbogate/local';
 
 const spec: TurbogateSpec = {
 	meta: {

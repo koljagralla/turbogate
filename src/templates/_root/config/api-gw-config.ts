@@ -4,7 +4,7 @@ import {
   Editability,
   GeneratedCodeDisclaimer,
   RecreationBehavior,
-} from '../../../generator/private/generated-doc-data';
+} from '../../../local/util/generated-doc-data';
 
 export const apiGwConfig: apigateway.RestApiProps = {};
 

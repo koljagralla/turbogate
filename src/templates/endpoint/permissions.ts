@@ -3,7 +3,7 @@ import {
   Editability,
   GeneratedCodeDisclaimer,
   RecreationBehavior,
-} from '../../generator/private/generated-doc-data';
+} from '../../local/util/generated-doc-data';
 
 export const permissions = [
   // 'MY_DYNAMO_1_READ',

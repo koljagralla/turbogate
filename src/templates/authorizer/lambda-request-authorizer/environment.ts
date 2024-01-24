@@ -1,12 +1,12 @@
 import { ZodType, z } from 'zod';
-import { EnvironmentDefinition } from '../../../runtime/types/definitions/environment-defintion';
-import { Env } from '../../../runtime/util/env';
+import { EnvironmentDefinition } from '../../../production/types/definitions/environment-defintion';
+import { Env } from '../../../production/util/env';
 import {
   Deletability,
   Editability,
   GeneratedCodeDisclaimer,
   RecreationBehavior,
-} from '../../../generator/private/generated-doc-data';
+} from '../../../local/util/generated-doc-data';
 
 export const zEnvironment = z.object({
   // MY_ENV_VAR: Env.string,

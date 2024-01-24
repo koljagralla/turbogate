@@ -3,15 +3,18 @@ import {
   Editability,
   GeneratedCodeDisclaimer,
   RecreationBehavior,
-} from '../../../generator/private/generated-doc-data';
-import { parseEnvironment } from '../../../runtime/parser/parse-environment';
-import { LambdaAuthorizerInputEvent } from '../../../runtime/types/missing-aws-types/lambda-authorizer-input-event';
-import { LambdaAuthorizerResponse } from '../../../runtime/types/missing-aws-types/lambda-authorizer-response';
-import { LambdaAuthorizerUtil } from '../../../runtime/util/lambda-authorizer-util';
+} from '../../../local/util/generated-doc-data';
+import { handleFauxExtendZodWithOpenApi } from '../../../production/openapi/faux-extend-zod-with-open-api';
+import { parseEnvironment } from '../../../production/parser/parse-environment';
+import { LambdaAuthorizerInputEvent } from '../../../production/types/missing-aws-types/lambda-authorizer-input-event';
+import { LambdaAuthorizerResponse } from '../../../production/types/missing-aws-types/lambda-authorizer-response';
+import { LambdaAuthorizerUtil } from '../../../production/util/lambda-authorizer-util';
 import { zEnvironment } from './environment';
 import { main } from './main';
 
 export const handler = async (event: LambdaAuthorizerInputEvent): Promise<LambdaAuthorizerResponse<any, any>> => {
+  handleFauxExtendZodWithOpenApi; // This need to be in the code so the fauxExtendZodWithOpenApi is not tree shaken.
+
   const environment = parseEnvironment(zEnvironment);
 
   const result = await main(environment, event);

@@ -6,7 +6,6 @@
     {
       "mode": "bundle",
       "project": "tsconfig.json",
-      "exportFilename": "index.ts",
       "useSemicolon": true,
       "useBanner": false,
       "useTimestamp": false,
@@ -16,12 +15,20 @@
       "overwrite": true,
       "backup": false,
       "generationStyle": "auto",
-      "include": ["./src/runtime/**/*.ts", "./src/generator/public/**/*.ts"],
-      "exclude": [],
+      "include": [
+        "./src/local/spec/**/*.ts",
+        "./src/local/constructs/**/*.ts",
+        "./src/local/util/extend-zod-with-open-api.ts",
+        "./src/local/util/wire-turbogate.ts",
+        "./src/production/**/*.ts"
+      ],
+      "exclude": [
+        "./src/production/index.ts"
+      ],
       "skipEmptyDir": true,
       "removeBackup": false,
       "forceYes": false,
-      "output": "./src"
+      "output": "./src/local"
     }
   ]
 }

@@ -4,19 +4,22 @@ import {
   Editability,
   GeneratedCodeDisclaimer,
   RecreationBehavior,
-} from '../../generator/private/generated-doc-data';
-import { parseAuthorizerContext } from '../../runtime/parser/parse-authorizer-context';
-import { parseEnvironment } from '../../runtime/parser/parse-environment';
-import { parseRequest } from '../../runtime/parser/parse-request';
-import { parseResponse } from '../../runtime/parser/parse-response';
-import { RawRequest } from '../../runtime/types/raw-request';
+} from '../../local/util/generated-doc-data';
+import { parseAuthorizerContext } from '../../production/parser/parse-authorizer-context';
+import { parseEnvironment } from '../../production/parser/parse-environment';
+import { parseRequest } from '../../production/parser/parse-request';
+import { parseResponse } from '../../production/parser/parse-response';
+import { RawRequest } from '../../production/types/raw-request';
 import { z } from 'zod';
 import { zAuthorizerContext } from './authorizer';
 import { zEnvironment } from './environment';
 import { main } from './main';
 import { Request, zRequest } from './request';
+import { handleFauxExtendZodWithOpenApi } from '../../production/openapi/faux-extend-zod-with-open-api';
 
 export const handler = async (rawRequest: RawRequest, context: Context): Promise<APIGatewayProxyResult> => {
+  handleFauxExtendZodWithOpenApi; // This need to be in the code so the fauxExtendZodWithOpenApi is not tree shaken.
+
   const environment = parseEnvironment(zEnvironment);
   const authorizerContext = parseAuthorizerContext(zAuthorizerContext, rawRequest);
 

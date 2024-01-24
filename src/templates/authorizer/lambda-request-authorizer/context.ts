@@ -4,8 +4,8 @@ import {
   Editability,
   GeneratedCodeDisclaimer,
   RecreationBehavior,
-} from '../../../generator/private/generated-doc-data';
-import { AutoSerializedAuthorizerContextZodType } from '../../../runtime/types/authorizer/auto-serialized-authorizer-context-zod-type';
+} from '../../../local/util/generated-doc-data';
+import { AutoSerializedAuthorizerContextZodType } from '../../../production/types/authorizer/auto-serialized-authorizer-context-zod-type';
 
 export const zContext = z.object({
   // myContextValue: z.string(),

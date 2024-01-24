@@ -4,12 +4,12 @@ import {
   Editability,
   GeneratedCodeDisclaimer,
   RecreationBehavior,
-} from '../../../../generator/private/generated-doc-data';
-import { ResponsesDeclaration } from '../../../../runtime/types/response/responses-declaration';
+} from '../../../../local/util/generated-doc-data';
+import { ResponsesDeclaration } from '../../../../production/types/response/responses-declaration';
 
 export const http500InternalServerError = {
   500: {
-    description: 'Internal server error',
+    description: 'Internal server error.',
     schema: z.any(),
   },
 } as const satisfies ResponsesDeclaration;

@@ -4,23 +4,30 @@ import {
   Editability,
   GeneratedCodeDisclaimer,
   RecreationBehavior,
-} from '../../../../generator/private/generated-doc-data';
-import { ResponsesDeclaration } from '../../../../runtime/types/response/responses-declaration';
+} from '../../../../local/util/generated-doc-data';
+import { ResponsesDeclaration } from '../../../../production/types/response/responses-declaration';
 
 export const http400ValidationError = {
   400: {
-    description: 'Validation error',
-    schema: z.object({
-      validationErrors: z.array(
-        z.object({
-          code: z.nativeEnum(ZodIssueCode),
-          message: z.string(),
-          path: z.array(z.string()),
-        }),
-      ),
-    }),
+    description: 'The validation of the request failed.',
+    schema: z
+      .object({
+        validationErrors: z
+          .array(
+            z.object({
+              code: z.nativeEnum(ZodIssueCode),
+              message: z.string(),
+              path: z.array(z.string()),
+            }),
+          )
+          .openapi({
+            description: 'A list of Zod validation errors.',
+          }),
+      })
+      .openapi('ZodValidationError'),
   },
 } as const satisfies ResponsesDeclaration;
+
 
 export const generatedCodeDisclaimer: GeneratedCodeDisclaimer = {
   purpose: 'Provide a common defintion for HTTP 400 response.',

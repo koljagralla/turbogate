@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import { Constants as Constants } from '../../constants';
-import { Deletability, Editability, GeneratedCodeDisclaimer } from '../private/generated-doc-data';
+import { Deletability, Editability, GeneratedCodeDisclaimer } from './generated-doc-data';
 import { buildGeneratedCodeDisclaimerComment } from './build-generated-doc-disclaimer-comment';
 
 /**

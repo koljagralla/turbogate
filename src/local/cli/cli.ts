@@ -3,8 +3,8 @@ import { Argument, Command } from 'commander';
 import * as fs from 'fs';
 import * as path from 'path';
 import { Constants } from '../../constants';
-import { ApiBuilder, ApiBuilderConfig } from '../public/generator/api-builder';
-import { buildSpec } from '../public/generator/spec-builder';
+import { ApiBuilder, ApiBuilderConfig } from '../builder/api-builder';
+import { buildSpec } from '../builder/spec-builder';
 import { z } from 'zod';
 
 const program = new Command();
@@ -60,7 +60,7 @@ program
   .option(
     '-r --root <root>',
     'The directory to create the new directory with spec file in',
-    process.cwd(), // Default value for root
+    process.env.INIT_CWD || process.cwd(), // Default value for root
   )
   .addArgument(
     new Argument(
