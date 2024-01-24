@@ -119,7 +119,7 @@ export class ApiBuilder {
     const content = fs.readFileSync(`${this.config.rootDirectory}/docs.ts`, 'utf-8');
     const contentWithCorrectApiName = content.replace(
       'My API',
-      this.apiConfig.meta.name.replace('-', ' ').toUpperCase(),
+      this.apiConfig.meta.name.replaceAll('-', ' ').toUpperCase(),
     );
     fs.writeFileSync(`${this.config.rootDirectory}/docs.ts`, contentWithCorrectApiName);
   }
