@@ -116,14 +116,14 @@ Each generated file contains a header comment explaining its purpose, editabilit
 > Turbogate offers two ways to organize your endpoints. `byResource` groups the endpoints in folders named after the first segment of the path of each endpoint. `allTogether` puts all endpoints together in one folder. The default (and recommended for APIs with more than a couple of endpoints) structure is `byResource`. You can choose by using the `--endpointStructure` option.
 
 ### 5. Fill the gaps on endpoints and authorizers
-Now you need to adjust the generated boilerplate files for you endpoints and authorizers. This is too intuitive and easy to bore you with a detailed step-by-step instruction. Just see the [example API]() and try for yourself. 
+Now you need to adjust the generated boilerplate files for you endpoints and authorizers. This is too intuitive and easy to bore you with a detailed step-by-step instruction. Just see the [example API](#examples) and try for yourself. 
 
 ### 6. Add the turbogate to your IaC
-To add your turbogate you app you need to create an instance of the generated `MyAppTurbogate` class within a stack of your application. You will find that the constructor requires you to hand in values for all environment variables declared on your endpoints and authorizers. Additionally, you need to provide hooks that grant the defined permissions. Again, this is quite inutuitive, just see the [example API]().
+To add your turbogate you app you need to create an instance of the generated `MyAppTurbogate` class within a stack of your application. You will find that the constructor requires you to hand in values for all environment variables declared on your endpoints and authorizers. Additionally, you need to provide hooks that grant the defined permissions. Again, this is quite inutuitive, just see the [example API](#examples).
 
 ### 7. Adding OpenAPI spec generation
 To enable the generation of an OpenAPI 3.1 spec file just add and empty object to the `openapi` field of the params object in the constructor call of `MyAppTurbogate` that you set up in the previous step. Feel free to customize the generation by adding config values to this object.
-When you now run a CDK synth the specfile will automatically be generated. However, there won't be much comments and examples. To add those you can [edit the root docs.ts file](), [edit the docs.ts file of each endpoint]() or [authorizer](), [extend the Zod objects describing the request]() and [the response](). See the docs of [zod-to-openapi](https://github.com/asteasolutions/zod-to-openapi) to learn more about the latter two.
+When you now run a CDK synth the specfile will automatically be generated. However, there won't be much comments and examples. To add those you can [edit the root docs.ts file](#examples), [edit the docs.ts file of each endpoint](#examples) or [authorizer](#examples), [extend the Zod objects describing the request](#examples) and [the response](#examples). See the docs of [zod-to-openapi](https://github.com/asteasolutions/zod-to-openapi) to learn more about the latter two.
 
 ### 8. Addind and removing endpoints and authorizers
 To <ins>add an endpoint or authorizer</ins> just add in your `turbospec.ts` and rerun the `turbogate build` command (see step 4).
@@ -178,3 +178,6 @@ Do whatever you like but these naming convetions for environment variable and pe
 
   
 Feel free to suggest changes or new features by opening an issue.
+
+# Examples
+A full example repo will be added soon and the respective hyperlinks will be updated.
