@@ -10,10 +10,8 @@ import {
 
 export const defaultConfig: EndpointConfig & LambdaRequestAuthorizerConfig = {
   lambda: {
-    runtime: lambda.Runtime.NODEJS_18_X,
     bundling: {
       minify: true,
-      externalModules: ['@aws-sdk/*'],
       sourceMap: true,
     },
     environment: {
