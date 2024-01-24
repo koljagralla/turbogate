@@ -58,8 +58,9 @@ The `moduleResolution` in your `tsconfig.json` needs to be set to `Node16` (or a
 <details>
 <summary>Why?</summary>
 
-> [!NOTE]
 > Turbogate uses the [NodejsFunction construct](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_lambda_nodejs-readme.html) that uses ESBuild to automatically transpile, bundle and minify the lambda handlers written in TS. Currently ESBuild will bundle all exports from an index files as soon as you import one export (see [here](https://github.com/evanw/esbuild/issues/1794)). So to not blow up the deployed lambdas to 10MB+ sizes due to bundling the complete CDK package (and others) due to importing some files from turbogate we need to expose two different entrypoints. One for use in the IaC code and one for the lambdas production code. To be able to do so we need the `exports` field in the `package.json` which TypeScript only understands when in certain module resolution strategies (see [here](https://stackoverflow.com/a/74485520)).
+
+
 </details>
 
 ### 1. Installation
@@ -120,12 +121,19 @@ Now you need to adjust the generated boilerplate files for you endpoints and aut
 ### 6. Add the turbogate to your IaC
 To add your turbogate you app you need to create an instance of the generated `MyAppTurbogate` class within a stack of your application. You will find that the constructor requires you to hand in values for all environment variables declared on your endpoints and authorizers. Additionally, you need to provide hooks that grant the defined permissions. Again, this is quite inutuitive, just see the [example API]().
 
-### 7. Addind and removing endpoints and authorizers
+### 7. Adding OpenAPI spec generation
+To enable the generation of an OpenAPI 3.1 spec file just add and empty object to the `openapi` field of the params object in the constructor call of `MyAppTurbogate` that you set up in the previous step. Feel free to customize the generation by adding config values to this object.
+When you now run a CDK synth the specfile will automatically be generated. However, there won't be much comments and examples. To add those you can [edit the root docs.ts file](), [edit the docs.ts file of each endpoint]() or [authorizer](), [extend the Zod objects describing the request]() and [the response](). See the docs of [zod-to-openapi](https://github.com/asteasolutions/zod-to-openapi) to learn more about the latter two.
+
+### 8. Addind and removing endpoints and authorizers
 To <ins>add an endpoint or authorizer</ins> just add in your `turbospec.ts` and rerun the `turbogate build` command (see step 4).
 
 To <ins>remove an endpoint</ins> remove it in your `turbospec.ts` and rerun the `turbogate build` command (see step 3). Additionally, delete its respective folder. If your endpoint declared unique environment values or permissions that are orphaned now you might also need to remove those values from the constructor arguments of your turbogate.
 
 To <ins>remove an authorizer</ins> remove it in your `turbospec.ts` (delcaration of the authorizer itself and all references by endpoints), delete all `authorizer.ts` files of endpoints that used that authorizer and rerun the `turbogate build` command (see step 4). Additionally, delete its respective folder. If your authorizer declared unique environment values or permissions that are orphaned now you might also need to remove those values from the constructor arguments of your turbogate. Also, since you authorizer context probably changed you might need to tidy up the the business code in the `main.ts` files of the formerly protected endpoints.
+
+> [!NOTE]
+> Automatic removal of endpoints and authorizers that are not longer present in the `turbospec.ts` file is part of the [roadmap](#roadmap).
 
 
 # Patterns and recommended conventions
