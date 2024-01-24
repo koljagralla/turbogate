@@ -1,12 +1,11 @@
-import * as lambda from 'aws-cdk-lib/aws-lambda';
-import { EndpointConfig } from '../../../production/types/configs/endpoint-config';
-import { LambdaRequestAuthorizerConfig } from '../../../production/types/configs/lambda-request-authorizer-config';
 import {
   Deletability,
   Editability,
   GeneratedCodeDisclaimer,
   RecreationBehavior,
 } from '../../../local/util/generated-doc-data';
+import { EndpointConfig } from '../../../production/types/configs/endpoint-config';
+import { LambdaRequestAuthorizerConfig } from '../../../production/types/configs/lambda-request-authorizer-config';
 
 export const defaultConfig: EndpointConfig & LambdaRequestAuthorizerConfig = {
   lambda: {
