@@ -272,8 +272,8 @@ export abstract class AbstractTurbogate<
     const lambdaFn = new NodejsFunction(this.scope, this.id(name, 'lambda'), {
       functionName: this.name(name, 'lambda'),
       entry: path.join(this.params.rootDirectory, `/${directoryPath}/handler.ts`),
-      environment: this.createEnvironmentConfig(directoryPath),
       ...props,
+      environment: { ...this.createEnvironmentConfig(directoryPath), ...props.environment },
     });
 
     try {
@@ -283,7 +283,7 @@ export abstract class AbstractTurbogate<
         this.params.permissions[permission](lambdaFn);
       });
     } catch (e: any) {
-      throw new Error(`Missing or corrupted permissions.ts file in ${directoryPath}.`);
+      throw new Error(`Missing or corrupted permissions.ts file in ${directoryPath}.`); // TODO make error message more verbose
     }
 
     return lambdaFn;
