@@ -64,6 +64,7 @@ The `moduleResolution` in your `tsconfig.json` needs to be set to `Node16` (or a
 </details>
 
 ### 1. Installation
+#### Adding packages
 Turbogate three dev peer dependencies. You most probably will already have some of them installed in a Typescript CDK project.
 
 ```bash
@@ -76,7 +77,7 @@ Next, install the one runtime peer dependency Zod.
 yarn add zod
 ```
 
-Finally install the main package:
+Then install the main package:
 
 ```bash
 yarn add koljagralla/turbogate
@@ -84,6 +85,19 @@ yarn add koljagralla/turbogate
 
 > [!NOTE]
 > In case the peer dependencies do not work properly, ensure that your installed versions have no breaking changes with the versions specified in turbogate's package.json.
+
+#### Adding wiring
+
+Finally, in the entrypoint file of your CDK project (the file where the app is initialized and the stack constructors are called) add this import statement to the *very top* of the file: 
+```ts
+import { wireTurbogate } from 'turbogate/local'; // Keep at top of imports!
+```
+After your imports add this line:
+```ts
+wireTurbogate; // Do not remove
+```
+This will ensure necessary prototype adjustments to be made early enough so CDK does not trip over its own feet during synth (also [see example](#examples)).
+
 
 ### 2. Initialization
 Navigate to the directory you want the newly created API to reside in. Then run `yarn turbogate init my-api`. Of cause, replace the `my-api` with your API name.
