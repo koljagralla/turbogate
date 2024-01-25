@@ -1,6 +1,10 @@
 {
   "name": "turbogate",
   "version": "2.0.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/koljagralla/turbogate.git"
+  },
   "description": "Micro framework and code generator to build truly serverless well validated and well documeted REST APIs using AWS CDK Typescript in turbo speed.",
   "exports": {
     ".": "./src/production/index.ts",
