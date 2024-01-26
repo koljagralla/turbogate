@@ -42,7 +42,7 @@ Turbogate was developed with the modern TypeScript developer in mind. It (mostly
 
 
 # Getting started
-The following step-by-step tutorial will show you how to setup turbogate in your CDK project. An example project with a small demo app can be found [here](https://github.com/koljagralla/turbogate-demo). Each step of the step-by-step instructions will link to a commit in that repo. However, it is a good idea to clone the repo and take a look at it locally. The repo is complete and ready to deploy. If you want, you can also add the unimplemented endpoints (see [turbospec.ts]() TODO). 
+The following step-by-step tutorial will show you how to setup turbogate in your CDK project. An example project with a small demo app can be found [here](https://github.com/koljagralla/turbogate-demo). Each step of the step-by-step instructions will link to a commit in that repo. However, it is a good idea to clone the repo and take a look at it locally. The repo is complete and ready to deploy.
 
 Assuming you use yarn. Adapt to your package manager if needed.
 
