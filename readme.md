@@ -103,8 +103,9 @@ After your imports add this line:
 ```ts
 wireTurbogate; // Do not remove
 ```
-This will ensure necessary prototype adjustments to be made early enough so CDK does not trip over its own feet during synth ([example](https://github.com/koljagralla/turbogate-example/blob/master/bin/turbogate-example.ts)).
+This will ensure necessary prototype adjustments to be made early enough so CDK does not trip over its own feet during synth.
 
+[Related commit in demo repo.](https://github.com/koljagralla/turbogate-demo/commit/011fd647cbcdc87d4a689cce4ceee1d14848fe94)
 
 ### 2. Initialization
 Navigate to the directory you want the newly created API to reside in. Then run `yarn turbogate init my-api`. Of cause, replace the `my-api` with your API name.
