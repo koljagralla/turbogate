@@ -1,4 +1,4 @@
-#!/usr/bin/env ts-node -T
+#!node_modules/.bin/tsx
 import { Argument, Command } from 'commander';
 import * as fs from 'fs';
 import * as path from 'path';

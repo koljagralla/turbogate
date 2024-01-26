@@ -69,7 +69,7 @@ The `moduleResolution` in your `tsconfig.json` needs to be set to `Node16` (or a
 Turbogate has some dev peer dependencies. You most probably will already have most of them installed in a Typescript CDK project.
 
 ```bash
-yarn add aws-cdk-lib ts-node @asteasolutions/zod-to-openapi @types/aws-lambda -D
+yarn add aws-cdk-lib tsx @asteasolutions/zod-to-openapi @types/aws-lambda -D
 ```
 
 Next, install the one runtime peer dependency Zod.
@@ -85,7 +85,9 @@ yarn add turbogate
 ```
 
 > [!IMPORTANT]
-> When you setup a project with `cdk init` the default synth method is ts-node. ts-node struggles with mixed ESM and CommonJS modules. If you not already have switched to tsx in your CDK projec you should do that now. Else you might see something `SyntaxError: Unexpected token 'export'` during synth.
+> When you setup a project with `cdk init` the default synth method is ts-node. ts-node struggles with mixed ESM and CommonJS modules. If you not already have switched to tsx in your CDK project you should do that now. Else you might see something `SyntaxError: Unexpected token 'export'` during synth.
+>
+> So it is recommended to update the `app` value in your cdk.json to `tsx bin/turbogate-demo.ts`.
 
 #### Adding wiring
 
