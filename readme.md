@@ -142,6 +142,7 @@ Each generated file contains a header comment explaining its purpose, editabilit
 Now you need to adjust the generated boilerplate files for you endpoints and authorizers. For endpoints this means defining request and response as well as the business logic. For authorizers this means defining the context and the business logic. For both you can additionally define required environment variables, permissions and documentation. 
 
 [Prerequisite commit in demo repo](https://github.com/koljagralla/turbogate-demo/commit/8743116950bf818a46696273240dc34a67a59eb8) (adding a table to use it in the endpoint).
+
 [Related commit in demo repo.](https://github.com/koljagralla/turbogate-demo/commit/c78cdb4d769cc69e78f68ecd038aada97e4439eb)
 
 ### 6. Add the turbogate to your IaC
