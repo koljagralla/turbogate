@@ -70,7 +70,7 @@ Turbogate has some dev peer dependencies. You probably already have most of them
 yarn add aws-cdk-lib tsx @asteasolutions/zod-to-openapi @types/aws-lambda -D
 ```
 
-Next, install the one runtime peer dependency Zod.
+Next, install the runtime peer dependency Zod.
 
 ```bash
 yarn add zod
@@ -130,7 +130,7 @@ This will create the boilerplate files for your defined authorizers and endpoint
 
 Now, don't be scared. There are nine files per endpoint. This looks like a lot on first sight but the files are quite small and you will soon find that this allows for great overview when working on an endpoint after you spent some with turbogate.
 
-Each generated file contains a header comment explaining its purpose, editability and regenrating behavior. You should take a few minutes to get familiar with those files.
+Each generated file contains a header comment explaining its purpose, editability and regenerating behavior. You should take a few minutes to get familiar with those files.
 
 
 > [!TIP]
@@ -198,7 +198,7 @@ The boilerplate code files already come formatted in quite common standards. The
 ```
 
 ### Naming convention recommendation
-Do whatever you like but these naming convetions for environment variable and permission names seem to work pretty well.
+Do whatever you like but these naming conventions for environment variable and permission names seem to work pretty well.
 
 <ins>Environment variable names</ins>: Screaming snake case, resource name followed by property name, e.g. `MY_TABLE_NAME` or `MY_SECRET_ARN`.
 
@@ -207,7 +207,7 @@ Do whatever you like but these naming convetions for environment variable and pe
 
 
 # Roadmap
-* ~~Adding the possibility to generate complete and verbosely documented OpenAPI spec files from the turbogate defintion.~~ ✅
+* ~~Adding the possibility to generate complete and verbosely documented OpenAPI spec files from the turbogate definition.~~ ✅
 * Automate removal of endpoints and authorizers (treeshaking).
 * Rename permissions to hooks. Sometimes you need to interact with a lambda after its constructs creation in a way that is not adding any permissions. Therefore the name hooks seems better suited.
 
