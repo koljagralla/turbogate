@@ -1,11 +1,13 @@
-import { copyTemplate } from '../util/copy-template-directory';
-import { TurbogateSpec, zTurbogateSpec } from '../spec/zTurbogateSpec';
+import { extendZodWithOpenApi } from '@asteasolutions/zod-to-openapi';
 import * as fs from 'fs';
 import path from 'path';
+import { z } from 'zod';
 import { Authorizer } from '../spec/zAuthorizer';
 import { HttpMethod } from '../spec/zHttpMethod';
-import { Deletability, Editability, GeneratedCodeDisclaimer, RecreationBehavior } from '../util/generated-doc-data';
+import { TurbogateSpec, zTurbogateSpec } from '../spec/zTurbogateSpec';
 import { buildGeneratedCodeDisclaimerComment } from '../util/build-generated-doc-disclaimer-comment';
+import { copyTemplate } from '../util/copy-template-directory';
+import { Deletability, Editability, GeneratedCodeDisclaimer, RecreationBehavior } from '../util/generated-doc-data';
 
 export type ApiBuilderConfig = {
   rootDirectory: string;
@@ -13,7 +15,9 @@ export type ApiBuilderConfig = {
   endpointStructure: 'byResource' | 'allTogether';
 };
 export class ApiBuilder {
-  constructor(private readonly config: ApiBuilderConfig) {}
+  constructor(private readonly config: ApiBuilderConfig) {
+    extendZodWithOpenApi(z);
+  }
 
   private apiConfig: TurbogateSpec;
   private createdLambdaRequestAuthorizers: Set<string> = new Set();
