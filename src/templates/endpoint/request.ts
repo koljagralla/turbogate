@@ -7,8 +7,6 @@ import {
   RecreationBehavior,
 } from '../../local/util/generated-doc-data';
 
-export const description = '';
-
 export const zRequest = z.object({
   body: z.undefined(),
   pathParameters: z.object({}),
