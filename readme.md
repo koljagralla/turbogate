@@ -15,6 +15,7 @@ Simply <ins>no more spending and hour for an endpoint</ins> that would take minu
 - [Getting started](#getting-started)
 - [Patterns and recommended conventions](#patterns-and-recommended-conventions)
 - [Roadmap](#roadmap)
+- [Examples](#examples)
 
 
 
@@ -65,10 +66,10 @@ The `moduleResolution` in your `tsconfig.json` needs to be set to `Node16` (or a
 
 ### 1. Installation
 #### Adding packages
-Turbogate three dev peer dependencies. You most probably will already have some of them installed in a Typescript CDK project.
+Turbogate has some dev peer dependencies. You most probably will already have most of them installed in a Typescript CDK project.
 
 ```bash
-yarn add aws-cdk-lib ts-node @asteasolutions/zod-to-openapi -D
+yarn add aws-cdk-lib ts-node @asteasolutions/zod-to-openapi @types/aws-lambda -D
 ```
 
 Next, install the one runtime peer dependency Zod.
@@ -164,7 +165,7 @@ The CLI command offers a `--root`/`-r` option that allows you to pass in the tar
 Add an entry in the `scripts` section of your `package.json` to quickly run a turbogate build from everywhere.
 ```json
 "scripts": {
-	"tgb-myapi": "yarn turbogate build -r lib/stacks/my-stack/my-api"
+	"tgb-myapi": "yarn turbogate build -r lib/stacks/my-stack/my-api-turbogate"
 }
 ```
 
@@ -172,7 +173,7 @@ Add an entry in the `scripts` section of your `package.json` to quickly run a tu
 The boilerplate code files already come formatted in quite common standards. The dynamically generated entrypoint file is currently not perfecly fomatted. To ensure your codebase always adheres to your projects formatting conventions it is a good idea to append a formatting command for your whole turbogate API directory to your build script.
 ```json
 "scripts": {
-	"tgb-myapi": "yarn turbogate build -r lib/stacks/my-stack/my-api & prettier lib/stacks/my-stack/my-api -w"
+	"tgb-myapi": "yarn turbogate build -r lib/stacks/my-stack/my-api-turbogate & prettier lib/stacks/my-stack/my-api-turbogate -w"
 }
 ```
 
