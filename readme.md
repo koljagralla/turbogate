@@ -1,10 +1,10 @@
 # Turbogate <!-- omit in toc -->
 
-Turbogate is a micro framework and code generator aimed at building truly serverless, well validated, well documeted REST APIs using AWS CDK TypeScript in turbo speed.
+Turbogate is a micro framework and code generator aimed at building truly serverless, well validated, well documented REST APIs using AWS CDK TypeScript in turbo speed.
 
 **No more...**
 
-* ...manual and repetitive creation and wiring of constructs such as API gateways, API gateway resources,  lambdas, lambda integrations, lambda authorizers etc.
+* ...manual and repetitive creation and wiring of constructs such as API gateways, API gateway resources,  lambdas, lambda integrations, lambda authorizers, etc.
 * ...tediously writing request validation boilerplate.
 * ...several hundred lines of code to grant the same permissions and pass in the same environment values over and over again.
 
@@ -21,7 +21,7 @@ Simply <ins>no more spending and hour for an endpoint</ins> that would take minu
 # Features
 
 ### Automatic creation of boilerplate
-Simply define the fundamental structure of your API and turbogate will generate boileplate for all endpoints and authorizers. You only have to fill in the gaps (lambda business code and data structures).
+Simply define the fundamental structure of your API and turbogate will generate boilerplate for all endpoints and authorizers. You only have to fill in the gaps (lambda business code and data structures).
 
 ### Automatic creation and wiring of all required AWS constructs
 Once you filled the gaps in the boilerplate you are done. Everything else is automatically generated and wired up during cdk synth. Of cause you can pass in custom configurations for lambdas, lambda integrations, api gateway etc.
@@ -33,23 +33,23 @@ All contextual data your business code needs (request, environment data, authori
 Generate complete OpenAPI 3.1 spec from your API. Turbogate uses [zod-to-open-api](https://github.com/asteasolutions/zod-to-openapi) under the hood to gather information regarding request and response data and automatically combines those with all information regarding paths, authorizers and some additional metadata. The result is a concise OpenAPI spec that is suitable to generate developer documentation pages or SDKs/clients.
 
 
-### DRY declaration and defintion of environment data and permissions
-Define all needed lambda environment variables and permissions once and attach them to lambdas IoC style. No more `myDynamoTable.grantRead(...)` a dozen times in your IaC code.
+### DRY declaration and definition of environment data and permissions
+Define lambda environment variables and permissions once and attach them to lambdas IoC style. No more `myDynamoTable.grantRead(...)` a dozen times in your IaC code.
 
 ### Maximum adaptability
-Turbogate was developed with the modern TypeScript developer in mind. It (mostly) follows a functional approach instead of using classes. The code that defines an endpoint or authorizer is generated as fully adapatable boilerplate for you along with some recommdendations on what to look out for if you want to change it. This means while you of cause can use turbogate in full auto pilot to power code a 30+ endpoint API in a day you also could dive down deep into its mode of operation and precisely adjust most of it to your needs without having to change anything about the framework itself.
+Turbogate was developed with the modern TypeScript developer in mind. It (mostly) follows a functional approach instead of using classes. The code that defines an endpoint or authorizer is generated as fully adapatable boilerplate for you along with some recommdendations on what to look out for if you want to change it. This means, while you of cause can use turbogate in full auto pilot to power code a 30+ endpoint API in a day, you could as well dive down deep into its mode of operation and precisely adjust most of it to your needs without having to change anything about the framework itself.
 
 
 
 # Getting started
 The following step-by-step tutorial will show you how to setup turbogate in your CDK project. An example project with a small demo app can be found [here](https://github.com/koljagralla/turbogate-demo). Each step of the step-by-step instructions will link to a commit in that repo. However, it is a good idea to clone the repo and take a look at it locally. The repo is complete and ready to deploy.
 
-Assuming you use yarn. Adapt to your package manager if needed.
+All examples user yarn, adapt to your package manager if needed.
 
 ### Prerequisites
-Turbogate heavily utizilizes [Zod](https://github.com/colinhacks/zod) to define and validate inbound, outbound and config data structures. You should at least have a basic understanding on how to use Zod.
+Turbogate heavily utilizes [Zod](https://github.com/colinhacks/zod) to define and validate inbound, outbound and config data structures. You should at least have a basic understanding on how to use Zod.
 
-It is also a good idea to have a look at [zod-to-openapi](https://github.com/asteasolutions/zod-to-openapi) in case you want to make use of the OpenAPI spec generation feature. You do not need to set anything up, everything is wired up for you. But you should know the [`.openapi(...)`-method](https://github.com/asteasolutions/zod-to-openapi?tab=readme-ov-file#the-openapi-method)
+It is also a good idea to have a look at [zod-to-openapi](https://github.com/asteasolutions/zod-to-openapi) in case you want to make use of the OpenAPI spec generation feature. You do not need to set anything up. Everything is wired up for you. But you should know the [`.openapi(...)`-method](https://github.com/asteasolutions/zod-to-openapi?tab=readme-ov-file#the-openapi-method)
 
 The `moduleResolution` in your `tsconfig.json` needs to be set to `Node16` (or another supported strategy, see *Why?*). You need to set the `module` field accordingly (e.g. also `Node16`).
 <details>
