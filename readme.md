@@ -15,16 +15,10 @@ Simply <ins>no more spending and hour for an endpoint</ins> that would take minu
 - [Getting started](#getting-started)
 - [Patterns and recommended conventions](#patterns-and-recommended-conventions)
 - [Roadmap](#roadmap)
-- [Examples](#examples)
 
 
 
 # Features
-
-
-
-<!-- ### Lambda authorizers
-You can define lambda authorizers with the contexts they provide and assign them to endpoints in your `turbospec.ts`. The implementation of the business code for the defined authorizers is as easy and aided as that of the endpoint lambdas. -->
 
 ### Automatic creation of boilerplate
 Simply define the fundamental structure of your API and turbogate will generate boileplate for all endpoints and authorizers. You only have to fill in the gaps (lambda business code and data structures).
@@ -114,7 +108,9 @@ Navigate to the directory you want the newly created API to reside in. Then run 
 cd lib/stacks/my-stack
 yarn turbogate init my-api
 ```
-A folder called `my-api-turbogate` containing a `turbospec.ts` file will be created ([example](https://github.com/koljagralla/turbogate-example/blob/master/lib/stacks/my-stack/my-api-turbogate/turbospec.ts)).
+A folder called `my-api-turbogate` containing a `turbospec.ts` file will be created.
+
+[Related commit in demo repo.](https://github.com/koljagralla/turbogate-demo/commit/fb6d57c906e33aec55a8332c5555e0a29204f7f3)
 
 ### 3. Declare endpoints and authorizers
 The `turbospec.ts` contains some boilerplate for a basic API. Adapt to your needs.
@@ -122,33 +118,47 @@ The `turbospec.ts` contains some boilerplate for a basic API. Adapt to your need
 > [!TIP]
 > If you declare all your endpoints at once this will create a giant bulk commit as turbogate generates several files per endpoint. A good approach is to gradually add endpoints as you implement them. If you want to initially declare all of them you could do that and then comment out most of them until you want to implement them.
 
+[Related commit in demo repo.](https://github.com/koljagralla/turbogate-demo/commit/74051955f2298e3623099a566130455648402b41)
+
 ### 4. Generate boilerplate and entrypoint
 Once you adapted your `turbospec.ts` file according to your needs, run:
 ```bash
 cd my-api-turbogate
 yarn turbogate build
 ```
-This will create the boilerplate files for your defined authorizers ([example](https://github.com/koljagralla/turbogate-example/tree/master/lib/stacks/my-stack/my-api-turbogate/authorizer)) and endpoints ([example](https://github.com/koljagralla/turbogate-example/tree/master/lib/stacks/my-stack/my-api-turbogate/endpoints/items)) as well as the entrypoint `my-api-turbogate.ts` ([example](https://github.com/koljagralla/turbogate-example/blob/master/lib/stacks/my-stack/my-api-turbogate/my-api-turbogate.ts)) alongside some boilerplate config and response fragments.
+This will create the boilerplate files for your defined authorizers and endpoints as well as the entrypoint `my-api-turbogate.ts` alongside some boilerplate config and response fragments.
 
 Now, don't be scared. There are nine files per endpoint. This looks like a lot on first sight but the files are quite small and you will soon find that this allows for great overview when working on an endpoint after you spent some with turbogate.
 
 Each generated file contains a header comment explaining its purpose, editability and regenrating behavior. You should take a few minutes to get familiar with those files.
 
+
 > [!TIP]
 > Turbogate offers two ways to organize your endpoints. `byResource` groups the endpoints in folders named after the first segment of the path of each endpoint. `allTogether` puts all endpoints together in one folder. The default (and recommended for APIs with more than a couple of endpoints) structure is `byResource`. You can choose by using the `--endpointStructure` option.
+
+[Related commit in demo repo.](https://github.com/koljagralla/turbogate-demo/commit/4fa5c9e428d09a83fd4e5ae512075ab514e58181)
 
 ### 5. Fill the gaps on endpoints and authorizers
 Now you need to adjust the generated boilerplate files for you endpoints and authorizers. For endpoints this means defining request and response as well as the business logic. For authorizers this means defining the context and the business logic. For both you can additionally define required environment variables, permissions and documentation. 
 
+[Prerequisite commit in demo repo](https://github.com/koljagralla/turbogate-demo/commit/8743116950bf818a46696273240dc34a67a59eb8) (adding a table to use it in the endpoint).
+[Related commit in demo repo.](https://github.com/koljagralla/turbogate-demo/commit/c78cdb4d769cc69e78f68ecd038aada97e4439eb)
 
 ### 6. Add the turbogate to your IaC
-To add your turbogate you app you need to create an instance of the generated `MyAppTurbogate` class within a stack of your application. You will find that the constructor requires you to hand in values for all environment variables declared on your endpoints and authorizers. Additionally, you need to provide hooks that grant the defined permissions. Again, this is quite inutuitive, just see the [example API](#examples).
+To add your turbogate you app you need to create an instance of the generated `MyAppTurbogate` class within a stack of your application. You will find that the constructor requires you to hand in values for all environment variables declared on your endpoints and authorizers. Additionally, you need to provide hooks that grant the defined permissions.
+
+[Related commit in demo repo.](https://github.com/koljagralla/turbogate-demo/commit/09dc88c21e6e4744661dc8703477cbd7d7a72579)
 
 ### 7. Adding OpenAPI spec generation
-To enable the generation of an OpenAPI 3.1 spec file just add and empty object to the `openapi` field of the params object in the constructor call of `MyAppTurbogate` that you set up in the previous step. Feel free to customize the generation by adding config values to this object.
-When you now run a CDK synth the specfile will automatically be generated. However, there won't be much comments and examples. To add those you can [edit the root docs.ts file](#examples), [edit the docs.ts file of each endpoint](#examples) or [authorizer](#examples), [extend the Zod objects describing the request](#examples) and [the response](#examples). See the docs of [zod-to-openapi](https://github.com/asteasolutions/zod-to-openapi) to learn more about the latter two.
+To enable the generation of an OpenAPI 3.1 spec file just add and empty object to the `openapi` field of the params object in the constructor call of `MyAppTurbogate` that you set up in the previous step.
+When you now run a CDK synth the specfile will automatically be generated. 
 
-### 8. Addind and removing endpoints and authorizers
+[Related commit in demo repo.](https://github.com/koljagralla/turbogate-demo/commit/5455dc838550315212264a750fdcf1fcdd034d04)
+
+### 8. Done! 🎉
+That's it! That is the groundwork to use turbogate in your project. We added another endpoint (get-item) in the demo repo but the endpoints to update, delete and list items are still waiting to be implemented. Feel free to clone the [demo repo](https://github.com/koljagralla/turbogate-demo) to try out turbogate yourself right now.
+
+### Additional information: addind and removing endpoints and authorizers
 To <ins>add an endpoint or authorizer</ins> just add in your `turbospec.ts` and rerun the `turbogate build` command (see step 4).
 
 To <ins>remove an endpoint</ins> remove it in your `turbospec.ts` and rerun the `turbogate build` command (see step 3). Additionally, delete its respective folder. If your endpoint declared unique environment values or permissions that are orphaned now you might also need to remove those values from the constructor arguments of your turbogate.
@@ -158,6 +168,7 @@ To <ins>remove an authorizer</ins> remove it in your `turbospec.ts` (delcaration
 > [!NOTE]
 > Automatic removal of endpoints and authorizers that are not longer present in the `turbospec.ts` file is part of the [roadmap](#roadmap).
 
+[Related commit in demo repo.]()
 
 # Patterns and recommended conventions
 ### Working with constructs created by turbogate
@@ -181,7 +192,7 @@ Add an entry in the `scripts` section of your `package.json` to quickly run a tu
 The boilerplate code files already come formatted in quite common standards. The dynamically generated entrypoint file is currently not perfecly fomatted. To ensure your codebase always adheres to your projects formatting conventions it is a good idea to append a formatting command for your whole turbogate API directory to your build script.
 ```json
 "scripts": {
-	"tgb-myapi": "yarn turbogate build -r lib/stacks/my-stack/my-api-turbogate & prettier lib/stacks/my-stack/my-api-turbogate -w"
+	"tgb-myapi": "yarn turbogate build -r lib/stacks/my-stack/my-api-turbogate && prettier lib/stacks/my-stack/my-api-turbogate -w"
 }
 ```
 
@@ -201,6 +212,3 @@ Do whatever you like but these naming convetions for environment variable and pe
 
   
 Feel free to suggest changes or new features by opening an issue.
-
-# Examples
-A full example repo will be added soon and the respective hyperlinks will be updated.
