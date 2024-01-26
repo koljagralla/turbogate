@@ -48,7 +48,7 @@ Turbogate was developed with the modern TypeScript developer in mind. It (mostly
 
 
 # Getting started
-The following step-by-step tutorial will show you how to setup turbogate in your CDK project. An example project with a small demo app can be found [here](). Each step of the step-by-step instructions will link to a commit in that repo. However, it is a good idea to clone the repo and take a look at it locally. The repo is complete and ready to deploy. If you want, you can also add the unimplemented endpoints (see [turbospec.ts]() TODO). 
+The following step-by-step tutorial will show you how to setup turbogate in your CDK project. An example project with a small demo app can be found [here](https://github.com/koljagralla/turbogate-demo). Each step of the step-by-step instructions will link to a commit in that repo. However, it is a good idea to clone the repo and take a look at it locally. The repo is complete and ready to deploy. If you want, you can also add the unimplemented endpoints (see [turbospec.ts]() TODO). 
 
 Assuming you use yarn. Adapt to your package manager if needed.
 
@@ -65,6 +65,8 @@ The `moduleResolution` in your `tsconfig.json` needs to be set to `Node16` (or a
 
 
 </details>
+
+[Related commit in demo repo.](https://github.com/koljagralla/turbogate-demo/commit/00082210897ff60432710f97201562f13d2c4038)
 
 ### 1. Installation
 #### Adding packages
@@ -89,7 +91,7 @@ yarn add turbogate
 > [!IMPORTANT]
 > When you setup a project with `cdk init` the default synth method is ts-node. ts-node struggles with mixed ESM and CommonJS modules. If you not already have switched to tsx in your CDK project you should do that now. Else you might see something `SyntaxError: Unexpected token 'export'` during synth.
 >
-> So it is recommended to update the `app` value in your cdk.json to `tsx bin/turbogate-demo.ts`.
+> So it is recommended to update the `app` value in your cdk.json from `npx ts-node --prefer-ts-exts ...` to `yarn tsx ...`.
 
 #### Adding wiring
 
@@ -101,8 +103,9 @@ After your imports add this line:
 ```ts
 wireTurbogate; // Do not remove
 ```
-This will ensure necessary prototype adjustments to be made early enough so CDK does not trip over its own feet during synth ([example](https://github.com/koljagralla/turbogate-example/blob/master/bin/turbogate-example.ts)).
+This will ensure necessary prototype adjustments to be made early enough so CDK does not trip over its own feet during synth.
 
+[Related commit in demo repo.](https://github.com/koljagralla/turbogate-demo/commit/011fd647cbcdc87d4a689cce4ceee1d14848fe94)
 
 ### 2. Initialization
 Navigate to the directory you want the newly created API to reside in. Then run `yarn turbogate init my-api`. Of cause, replace the `my-api` with your API name.
