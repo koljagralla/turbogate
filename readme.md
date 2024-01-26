@@ -89,7 +89,7 @@ yarn add turbogate
 > [!IMPORTANT]
 > When you setup a project with `cdk init` the default synth method is ts-node. ts-node struggles with mixed ESM and CommonJS modules. If you not already have switched to tsx in your CDK project you should do that now. Else you might see something `SyntaxError: Unexpected token 'export'` during synth.
 >
-> So it is recommended to update the `app` value in your cdk.json to `tsx bin/turbogate-demo.ts`.
+> So it is recommended to update the `app` value in your cdk.json from `npx ts-node --prefer-ts-exts ...` to `yarn tsx ...`.
 
 #### Adding wiring
 
