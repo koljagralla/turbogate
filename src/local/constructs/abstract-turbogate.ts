@@ -276,7 +276,13 @@ export abstract class AbstractTurbogate<
       const permissions = require(path.join(this.params.rootDirectory, `/${directoryPath}/permissions.ts`))
         .permissions as PermissionName[];
       permissions.forEach(permission => {
-        this.params.permissions[permission](lambdaFn);
+        try {
+          this.params.permissions[permission](lambdaFn);
+        } catch (e) {
+          throw new Error(
+            `Failed to add permission ${permission} to lambda ${name}. Are you sure it is defined in the turbogate constructor call?`,
+          );
+        }
       });
     } catch (e: any) {
       throw new Error(`Missing or corrupted permissions.ts file in ${directoryPath}.`); // TODO make error message more verbose
@@ -302,7 +308,11 @@ export abstract class AbstractTurbogate<
         !providedEnvironmentVariablesNames.includes(requiredEnvironmentVariableName as any),
     );
     if (missingEnvironmentVariables.length > 0) {
-      throw new Error(`Missing environment variables: ${missingEnvironmentVariables.join(', ')}`);
+      throw new Error(
+        `Missing environment variables: ${missingEnvironmentVariables.join(
+          ', ',
+        )}. Please define them in the turbogate constructor call.`,
+      );
     }
 
     // Reassign for TS to understand what's going on
