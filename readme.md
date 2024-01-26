@@ -64,7 +64,7 @@ The `moduleResolution` in your `tsconfig.json` needs to be set to `Node16` (or a
 
 ### 1. Installation
 #### Adding packages
-Turbogate has some dev peer dependencies. You most probably will already have most of them installed in a Typescript CDK project.
+Turbogate has some dev peer dependencies. You probably already have most of them installed in a Typescript CDK project.
 
 ```bash
 yarn add aws-cdk-lib tsx @asteasolutions/zod-to-openapi @types/aws-lambda -D
@@ -160,11 +160,11 @@ When you now run a CDK synth the specfile will automatically be generated.
 That's it! That is the groundwork to use turbogate in your project. We added another endpoint (get-item) in the demo repo but the endpoints to update, delete and list items are still waiting to be implemented. Feel free to clone the [demo repo](https://github.com/koljagralla/turbogate-demo) to try out turbogate yourself right now.
 
 ### Additional information: addind and removing endpoints and authorizers
-To <ins>add an endpoint or authorizer</ins> just add in your `turbospec.ts` and rerun the `turbogate build` command (see step 4).
+To <ins>add an endpoint or authorizer</ins> just add in your `turbospec.ts` and rerun the `turbogate build` command.
 
-To <ins>remove an endpoint</ins> remove it in your `turbospec.ts` and rerun the `turbogate build` command (see step 3). Additionally, delete its respective folder. If your endpoint declared unique environment values or permissions that are orphaned now you might also need to remove those values from the constructor arguments of your turbogate.
+To <ins>remove an endpoint</ins> remove it in your `turbospec.ts` and rerun the `turbogate build` command. Additionally, delete its respective folder. If your endpoint declared unique environment values or permissions that are orphaned now you might also need to remove those values from the constructor arguments of your turbogate.
 
-To <ins>remove an authorizer</ins> remove it in your `turbospec.ts` (delcaration of the authorizer itself and all references by endpoints), delete all `authorizer.ts` files of endpoints that used that authorizer and rerun the `turbogate build` command (see step 4). Additionally, delete its respective folder. If your authorizer declared unique environment values or permissions that are orphaned now you might also need to remove those values from the constructor arguments of your turbogate. Also, since you authorizer context probably changed you might need to tidy up the the business code in the `main.ts` files of the formerly protected endpoints.
+To <ins>remove an authorizer</ins> remove it in your `turbospec.ts` (delcaration of the authorizer itself and all references by endpoints), delete all `authorizer.ts` files of endpoints that used that authorizer and rerun the `turbogate build` command. Additionally, delete its respective folder. If your authorizer declared unique environment values or permissions that are orphaned now you might also need to remove those values from the constructor arguments of your turbogate. Also, since you authorizer context probably changed you might need to tidy up the the business code in the `main.ts` files of the formerly protected endpoints.
 
 > [!NOTE]
 > Automatic removal of endpoints and authorizers that are not longer present in the `turbospec.ts` file is part of the [roadmap](#roadmap).
