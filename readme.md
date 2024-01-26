@@ -103,7 +103,7 @@ This will ensure necessary prototype adjustments to be made early enough so CDK 
 Navigate to the directory you want the newly created API to reside in. Then run `yarn turbogate init my-api`. Of cause, replace the `my-api` with your API name.
 
 ```bash
-cd src/stack/my-stack
+cd lib/stacks/my-stack
 yarn turbogate init my-api
 ```
 A folder called `my-api` containing a `turbospec.ts` file will be created. 
@@ -164,7 +164,7 @@ The CLI command offers a `--root`/`-r` option that allows you to pass in the tar
 Add an entry in the `scripts` section of your `package.json` to quickly run a turbogate build from everywhere.
 ```json
 "scripts": {
-	"tgb-myapi": "yarn turbogate build -r src/stacks/my-stack/my-api"
+	"tgb-myapi": "yarn turbogate build -r lib/stacks/my-stack/my-api"
 }
 ```
 
@@ -172,7 +172,7 @@ Add an entry in the `scripts` section of your `package.json` to quickly run a tu
 The boilerplate code files already come formatted in quite common standards. The dynamically generated entrypoint file is currently not perfecly fomatted. To ensure your codebase always adheres to your projects formatting conventions it is a good idea to append a formatting command for your whole turbogate API directory to your build script.
 ```json
 "scripts": {
-	"tgb-myapi": "yarn turbogate build -r src/stacks/my-stack/my-api & prettier src/stacks/my-stack/my-api -w"
+	"tgb-myapi": "yarn turbogate build -r lib/stacks/my-stack/my-api & prettier lib/stacks/my-stack/my-api -w"
 }
 ```
 
