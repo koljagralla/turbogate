@@ -84,8 +84,8 @@ Then install the main package:
 yarn add turbogate
 ```
 
-> [!NOTE]
-> In case the peer dependencies do not work properly, ensure that your installed versions have no breaking changes with the versions specified in turbogate's package.json.
+> [!IMPORTANT]
+> When you setup a project with `cdk init` the default synth method is ts-node. ts-node struggles with mixed ESM and CommonJS modules. If you not already have switched to tsx in your CDK projec you should do that now. Else you might see something `SyntaxError: Unexpected token 'export'` during synth.
 
 #### Adding wiring
 
@@ -97,7 +97,7 @@ After your imports add this line:
 ```ts
 wireTurbogate; // Do not remove
 ```
-This will ensure necessary prototype adjustments to be made early enough so CDK does not trip over its own feet during synth (also [see example](#examples)).
+This will ensure necessary prototype adjustments to be made early enough so CDK does not trip over its own feet during synth ([example](https://github.com/koljagralla/turbogate-example/blob/master/bin/turbogate-example.ts)).
 
 
 ### 2. Initialization
@@ -107,7 +107,7 @@ Navigate to the directory you want the newly created API to reside in. Then run 
 cd lib/stacks/my-stack
 yarn turbogate init my-api
 ```
-A folder called `my-api` containing a `turbospec.ts` file will be created. 
+A folder called `my-api-turbogate` containing a `turbospec.ts` file will be created ([example](https://github.com/koljagralla/turbogate-example/blob/master/lib/stacks/my-stack/my-api-turbogate/turbospec.ts)).
 
 ### 3. Declare endpoints and authorizers
 The `turbospec.ts` contains some boilerplate for a basic API. Adapt to your needs.
@@ -118,10 +118,10 @@ The `turbospec.ts` contains some boilerplate for a basic API. Adapt to your need
 ### 4. Generate boilerplate and entrypoint
 Once you adapted your `turbospec.ts` file according to your needs, run:
 ```bash
-cd my-api
+cd my-api-turbogate
 yarn turbogate build
 ```
-This will create the boilerplate files for your defined authorizers and endpoints as well as the entrypoint (`my-api-turbogate.ts`) alongside some boilerplate config and response fragments.
+This will create the boilerplate files for your defined authorizers ([example](https://github.com/koljagralla/turbogate-example/tree/master/lib/stacks/my-stack/my-api-turbogate/authorizer)) and endpoints ([example](https://github.com/koljagralla/turbogate-example/tree/master/lib/stacks/my-stack/my-api-turbogate/endpoints/items)) as well as the entrypoint `my-api-turbogate.ts` ([example](https://github.com/koljagralla/turbogate-example/blob/master/lib/stacks/my-stack/my-api-turbogate/my-api-turbogate.ts)) alongside some boilerplate config and response fragments.
 
 Now, don't be scared. There are nine files per endpoint. This looks like a lot on first sight but the files are quite small and you will soon find that this allows for great overview when working on an endpoint after you spent some with turbogate.
 
@@ -131,7 +131,8 @@ Each generated file contains a header comment explaining its purpose, editabilit
 > Turbogate offers two ways to organize your endpoints. `byResource` groups the endpoints in folders named after the first segment of the path of each endpoint. `allTogether` puts all endpoints together in one folder. The default (and recommended for APIs with more than a couple of endpoints) structure is `byResource`. You can choose by using the `--endpointStructure` option.
 
 ### 5. Fill the gaps on endpoints and authorizers
-Now you need to adjust the generated boilerplate files for you endpoints and authorizers. This is too intuitive and easy to bore you with a detailed step-by-step instruction. Just see the [example API](#examples) and try for yourself. 
+Now you need to adjust the generated boilerplate files for you endpoints and authorizers. For endpoints this means defining request and response as well as the business logic. For authorizers this means defining the context and the business logic. For both you can additionally define required environment variables, permissions and documentation. 
+
 
 ### 6. Add the turbogate to your IaC
 To add your turbogate you app you need to create an instance of the generated `MyAppTurbogate` class within a stack of your application. You will find that the constructor requires you to hand in values for all environment variables declared on your endpoints and authorizers. Additionally, you need to provide hooks that grant the defined permissions. Again, this is quite inutuitive, just see the [example API](#examples).
