@@ -218,6 +218,7 @@ export abstract class AbstractTurbogate<
           ...docs,
           method: operation.method.toLowerCase() as any,
           path: operation.path,
+          operationId: operation.name,
           request: {
             body:
               request.shape.body._def.typeName === 'ZodUndefined'
