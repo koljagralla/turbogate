@@ -11,6 +11,7 @@ export const http500InternalServerError = {
   500: {
     description: 'Internal server error.',
     schema: z.any(),
+    omitInOpenApi: true,
   },
 } as const satisfies ResponsesDeclaration;
 

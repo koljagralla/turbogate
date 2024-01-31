@@ -200,8 +200,11 @@ export abstract class AbstractTurbogate<
         delete docs.authorizationScopes;
         const parsedResponses: RouteConfig['responses'] = {};
         Object.entries(responses).forEach(([statusCode, response]) => {
+          if (response.omitInOpenApi) {
+            return;
+          }
           parsedResponses[statusCode] =
-            'schema' in response
+            'schema' in response && response.schema
               ? {
                   description: response.description!,
                   content: {
