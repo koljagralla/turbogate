@@ -263,6 +263,7 @@ export abstract class AbstractTurbogate<
     });
     const documentYaml = yaml.dump(document);
     const outputDirectory = config.outputDirectory ?? this.params.rootDirectory;
+    fs.mkdirSync(outputDirectory, { recursive: true });
     const fileName = config.fileName ?? 'openapi.yaml';
     const filePath = path.join(outputDirectory, fileName);
     fs.writeFileSync(filePath, documentYaml);
