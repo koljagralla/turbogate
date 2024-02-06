@@ -1,22 +1,22 @@
+import { OpenAPIRegistry, OpenApiGeneratorV31, RouteConfig } from '@asteasolutions/zod-to-openapi';
 import * as apigateway from 'aws-cdk-lib/aws-apigateway';
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { Construct } from 'constructs';
-import * as path from 'path';
-import { AnyZodObject, ZodObject, ZodType, z } from 'zod';
-import { Authorizer } from '../spec/zAuthorizer';
-import { HttpMethod } from '../spec/zHttpMethod';
-import { EndpointConfig } from '../../production/types/configs/endpoint-config';
-import { EnvironmentDefinition } from '../../production/types/definitions/environment-defintion';
-import { LambdaRequestAuthorizerConfig } from '../../production/types/configs/lambda-request-authorizer-config';
-import { ReducedNodejsFunctionProps } from '../../production/types/reduced-props/reduced-node-js-function-props';
-import { OpenAPIRegistry, OpenApiGeneratorV31, RouteConfig } from '@asteasolutions/zod-to-openapi';
-import * as yaml from 'js-yaml';
 import * as fs from 'fs';
-import { ResponsesDeclaration } from '../../production/types/response/responses-declaration';
-import { EndpointDocs } from '../../production/types/docs/endpoint-docs';
-import { OpenAPIProps } from '../../production/types/docs/openapi-props';
+import * as yaml from 'js-yaml';
+import * as path from 'path';
+import { AnyZodObject, ZodEffects, ZodObject } from 'zod';
+import { EndpointConfig } from '../../production/types/configs/endpoint-config';
+import { LambdaRequestAuthorizerConfig } from '../../production/types/configs/lambda-request-authorizer-config';
+import { EnvironmentDefinition } from '../../production/types/definitions/environment-defintion';
 import { ApiDocs } from '../../production/types/docs/api-docs';
 import { AuthorizerDocs } from '../../production/types/docs/authorizer-docs';
+import { EndpointDocs } from '../../production/types/docs/endpoint-docs';
+import { OpenAPIProps } from '../../production/types/docs/openapi-props';
+import { ReducedNodejsFunctionProps } from '../../production/types/reduced-props/reduced-node-js-function-props';
+import { ResponsesDeclaration } from '../../production/types/response/responses-declaration';
+import { Authorizer } from '../spec/zAuthorizer';
+import { HttpMethod } from '../spec/zHttpMethod';
 
 export abstract class AbstractTurbogate<
   Resource extends string,
@@ -233,9 +233,9 @@ export abstract class AbstractTurbogate<
                       },
                     },
                   },
-            query: request.shape.queryParameters,
-            headers: request.shape.headers,
-            params: request.shape.pathParameters,
+            query: this.refinementSaveZodObjectAccess(request.shape.queryParameters),
+            headers: this.refinementSaveZodObjectAccess(request.shape.headers),
+            params: this.refinementSaveZodObjectAccess(request.shape.pathParameters),
           },
           responses: parsedResponses,
           security: operation.authorizer
@@ -247,6 +247,14 @@ export abstract class AbstractTurbogate<
         process.exit(1);
       }
     });
+  }
+
+  /** Can be removed once https://github.com/asteasolutions/zod-to-openapi/issues/198 is resolved. */
+  private refinementSaveZodObjectAccess(element: ZodObject<any> | ZodEffects<any>): ZodObject<any> {
+    if (element instanceof ZodEffects) {
+      return element.sourceType();
+    }
+    return element;
   }
 
   private generateOpenApiSpec() {
